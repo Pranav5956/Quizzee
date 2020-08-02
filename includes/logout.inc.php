@@ -1,0 +1,14 @@
+<?php
+  if (isset($_POST['logout-submit'])) {
+    // Logout from google account if signed in
+    require_once "../vendor/config.php";
+    google_logout();
+
+    // Clean the session storage
+    session_start();
+    setcookie("UserInfo[userId]", '', time()-1, "/");
+    setcookie("UserInfo[name]", '', time()-1, "/");
+    session_destroy();
+  }
+  header("Location: ../index.php");
+?>
