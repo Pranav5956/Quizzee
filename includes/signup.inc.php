@@ -8,19 +8,19 @@
         empty($_POST['email']) || empty($_POST['password']) ||
         empty($_POST['confirm-password'])) {
       // Fill all fields - rollback nothing
-      $_SESSION['error'] = "Fill all fields";
+      $_SESSION['ERROR'] = "Fill all fields";
       header("Location: ../signup.php");
       return;
     } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
       // Invalid email - rollback first-name and last-name
-      $_SESSION['error'] = "Invalid email";
+      $_SESSION['ERROR'] = "Invalid email";
       $params = "fname=".urlencode($_POST['first-name']).
                 "&lname=".urlencode($_POST['last-name']);
       header("Location: ../signup.php?".$params);
       return;
     } elseif ($_POST['confirm-password'] != $_POST['password']) {
       // Wrong confirmation password - rollback first-name, last-name and email
-      $_SESSION['error'] = "Wrong password confirmation";
+      $_SESSION['ERROR'] = "Wrong password confirmation";
       $params = "fname=".urlencode($_POST['first-name']).
                 "&lname=".urlencode($_POST['last-name']).
                 "&email=".urlencode($_POST['email']);
@@ -35,7 +35,7 @@
         ));
 
         if ($exists_query->rowCount() > 0) {
-          $_SESSION['error'] = "There is already an account with the same Email ID";
+          $_SESSION['ERROR'] = "There is already an account with the same Email ID";
           header("Location: ../signup.php");
           return;
         } else {
@@ -51,13 +51,13 @@
           ));
 
           // Success - sign in user
-          $_SESSION['success'] = "Signup success!";
+          $_SESSION['SUCCESS'] = "Signup success!";
           header("Location: ../index.php");
           return;
         }
       } catch (Exception $e) {
         // Failure - redirect the user
-        $_SESSION['error'] = "Signup failure!";
+        $_SESSION['ERROR'] = "Signup failure!";
         header("Location: ../signup.php");
         return;
       }

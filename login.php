@@ -1,7 +1,7 @@
 <?php
   require_once "header.php";
   include_once "vendor/config.php";
-  if (isset($_SESSION['userId'])) {
+  if (isset($_SESSION['USERID'])) {
     header("Location: index.php");
     return;
   }

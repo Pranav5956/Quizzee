@@ -2,12 +2,16 @@
   require_once "autoload.php";
 
   // Creating the google api client
+  $CLIENT_ID = "183632463982-d7p45iv3b7k1n1f6jqf4k8kupp6akq5o.apps.googleusercontent.com";
+  $CLIENT_SECRET = "KQhQtEAL96wcuEWte4lGLaMI";
   $google_client = new Google_Client();
 
   // Setting the credentials and other settings
-  $google_client->setClientId("183632463982-d7p45iv3b7k1n1f6jqf4k8kupp6akq5o.apps.googleusercontent.com");
-  $google_client->setClientSecret("KQhQtEAL96wcuEWte4lGLaMI");
+  $google_client->setClientId($CLIENT_ID);
+  $google_client->setClientSecret($CLIENT_SECRET);
   $google_client->setRedirectUri("http://localhost/OnlineQuizManagement/includes/login.inc.php");
+  unset($CLIENT_ID);
+  unset($CLIENT_SECRET);
 
   // Requirements
   $google_client->addScope('email');
@@ -29,6 +33,7 @@
     // Check for account creation
     global $google_client;
     $token = $google_client->fetchAccessTokenWithAuthCode($_GET['code']);
+
     if (!isset($token['error'])) {
       $google_client->setAccessToken($token['access_token']);
 
@@ -39,20 +44,22 @@
       $fname = $data['given_name'];
       $lname = $data['family_name'];
       $email = $data['email'];
+      $profilepic = $data['picture'];
 
-      $exists_query = $conn->prepare("SELECT * FROM Users WHERE email=:email");
+      $exists_query = $conn->prepare("SELECT * FROM Users WHERE email=:email AND login='GOOGLE'");
       $exists_query->execute(array(
         ":email" => $email
       ));
 
       if ($exists_query->rowCount() > 0) {
-        $_SESSION['userId'] = $exists_query->fetch(PDO::FETCH_ASSOC)['uid'];
-        $_SESSION['name'] = $fname." ".$lname;
-        $_SESSION['pic'] = $data['picture'];
-        $_SESSION['success'] = "Successfully Logged in!";
+        $_SESSION['USERID'] = $exists_query->fetch(PDO::FETCH_ASSOC)['uid'];
+        $_SESSION['NAME'] = $fname." ".$lname;
+        $_SESSION['PROFILE-PICTURE'] = $profilepic;
+        $_SESSION['SUCCESS'] = "Logged in!";
         header("Location: ../index.php");
         return;
       } else {
+        // Create the user in the database
         $create_query = $conn->prepare("INSERT INTO Users(fname, lname, email, pwd, login)
                                         VALUES(:fname, :lname, :email, NULL, :login)");
         $create_query->execute(array(
@@ -62,14 +69,16 @@
           ":login" => "GOOGLE"
         ));
       }
-      $_SESSION['pic'] = $data['picture'];
-      $_SESSION['userId'] = $conn->lastInsertId();
-      $_SESSION['name'] = $fname." ".$lname;
-      $_SESSION['success'] = "Successfully Logged in!";
+
+      // Set user credentials
+      $_SESSION['USERID'] = $conn->lastInsertId();
+      $_SESSION['NAME'] = $fname." ".$lname;
+      $_SESSION['PROFILE-PICTURE'] = $profilepic;
+      $_SESSION['SUCCESS'] = "Successfully Logged in!";
       header("Location: ../index.php");
       return;
     } else {
-      $_SESSION['error'] = "Cannot login with Google Account!";
+      $_SESSION['ERROR'] = "Cannot login with Google Account!";
       header("Location: ../login.php");
       return;
     }

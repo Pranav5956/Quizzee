@@ -2,16 +2,16 @@
 <?php
   // Display Flash Messages
   function flash_message() {
-    if (isset($_SESSION['error'])) {
+    if (isset($_SESSION['ERROR'])) {
       echo '<p style="color: red" class="alert alert-danger">'.
-              $_SESSION['error'].
+              $_SESSION['ERROR'].
            '</p>';
-    	unset($_SESSION['error']);
-    } elseif (isset($_SESSION['success'])) {
+    	unset($_SESSION['ERROR']);
+    } elseif (isset($_SESSION['SUCCESS'])) {
     	echo '<p style="color: green" class="alert alert-success">'.
-              $_SESSION['success'].
+              $_SESSION['SUCCESS'].
            '</p>';
-    	unset($_SESSION['success']);
+    	unset($_SESSION['SUCCESS']);
     }
   }
 ?>

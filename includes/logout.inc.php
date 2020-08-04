@@ -6,8 +6,10 @@
 
     // Clean the session storage
     session_start();
-    setcookie("UserInfo[userId]", '', time()-1, "/");
-    setcookie("UserInfo[name]", '', time()-1, "/");
+
+    // Remove the cookies if they exist
+    setcookie("USERINFO[USERID]", '', time()-1, "/");
+    setcookie("USERINFO[NAME]", '', time()-1, "/");
     session_destroy();
   }
   header("Location: ../index.php");
