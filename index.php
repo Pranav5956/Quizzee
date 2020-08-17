@@ -6,16 +6,28 @@
 	flash_message();
 
 	// Retrieve cookie information
-	if (isset($_COOKIE['USERINFO'])) {
-		$_SESSION['USERID'] = $_COOKIE['USERINFO']['USERID'];
-		$_SESSION['NAME'] = $_COOKIE['USERINFO']['NAME'];
+	if (isset($_COOKIE['USERID'])) {
+		require_once "includes/db.inc.php";
+
+		$_SESSION['USERID'] = $_COOKIE['USERID'];
+
+		$login_query = $conn->prepare("SELECT * FROM Users
+																	 WHERE uid=:uid");
+		$login_query->execute(array(
+			':uid' => $_SESSION['USERID']
+		));
+		$result = $login_query->fetch(PDO::FETCH_ASSOC);
+
+		$_SESSION['NAME'] = $result['fname'].' '.$result['lname'];
+		$_SESSION['PROFILE-PICTURE'] = $result['profile_pic'];
+		$_SESSION['TYPE'] = $result['login'];
 	}
 ?>
 
 <!-- Login information -->
 <?php if (isset($_SESSION['USERID'])): ?>
 	<?php if (isset($_SESSION['PROFILE-PICTURE'])): ?>
-		<img src="<?php echo $_SESSION['PROFILE-PICTURE'] ?>" alt="Profile Image" class="rounded-circle"
+		<img src=<?php echo htmlentities($_SESSION['PROFILE-PICTURE']) ?> alt="Profile Image" class="rounded-circle"
 				 style="width: 10%; height: auto;">
 	<?php else: ?>
 		<img src="https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png" alt="No Profile Image" class="rounded-circle">
@@ -30,9 +42,13 @@
 <!-- Display the Login form and signup button if user is not logged in -->
 <?php if (isset($_SESSION['USERID'])): ?>
 	<!-- Logout Button -->
-	<form action="includes/logout.inc.php" method="post">
+	<form>
 		<input type="submit" name="logout-submit" value="Logout"
-					 title="Click to Logout" class="btn btn-primary">
+					 title="Click to Logout" class="btn btn-primary" formaction="includes/logout.inc.php" formmethod="post">
+		<?php if ($_SESSION['TYPE'] == 'LOGIN'): ?>
+			<input type="submit" name="action" value="Upload Profile Picture"
+				 		 title="Click to upload Profile Picture" class="btn btn-primary" formaction="change.php" formmethod="get">
+		<?php endif; ?>
 	</form>
 <?php else: ?>
 	<!-- Login and Signup Links -->

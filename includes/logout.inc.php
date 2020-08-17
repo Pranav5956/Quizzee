@@ -8,8 +8,7 @@
     session_start();
 
     // Remove the cookies if they exist
-    setcookie("USERINFO[USERID]", '', time()-1, "/");
-    setcookie("USERINFO[NAME]", '', time()-1, "/");
+    setcookie("USERID", '', time()-1, "/");
     session_destroy();
   }
   header("Location: ../index.php");

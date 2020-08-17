@@ -40,8 +40,8 @@
           return;
         } else {
           // Create a new Users entry in the database
-          $signin_query = $conn->prepare("INSERT INTO Users(fname, lname, email, pwd, login)
-                                          VALUES(:fname, :lname, :email, :pwd, :login)");
+          $signin_query = $conn->prepare("INSERT INTO Users(fname, lname, email, pwd, login, profile_pic)
+                                          VALUES(:fname, :lname, :email, :pwd, :login, NULL)");
           $signin_query->execute(array(
             ':fname' => $_POST['first-name'],
             ':lname' => $_POST['last-name'],

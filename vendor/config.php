@@ -55,13 +55,14 @@
         $_SESSION['USERID'] = $exists_query->fetch(PDO::FETCH_ASSOC)['uid'];
         $_SESSION['NAME'] = $fname." ".$lname;
         $_SESSION['PROFILE-PICTURE'] = $profilepic;
+        $_SESSION['TYPE'] = 'GOOGLE';
         $_SESSION['SUCCESS'] = "Logged in!";
         header("Location: ../index.php");
         return;
       } else {
         // Create the user in the database
-        $create_query = $conn->prepare("INSERT INTO Users(fname, lname, email, pwd, login)
-                                        VALUES(:fname, :lname, :email, NULL, :login)");
+        $create_query = $conn->prepare("INSERT INTO Users(fname, lname, email, pwd, login, profile_pic)
+                                        VALUES(:fname, :lname, :email, NULL, :login, NULL)");
         $create_query->execute(array(
           ":fname" => $fname,
           ":lname" => $lname,
@@ -74,6 +75,7 @@
       $_SESSION['USERID'] = $conn->lastInsertId();
       $_SESSION['NAME'] = $fname." ".$lname;
       $_SESSION['PROFILE-PICTURE'] = $profilepic;
+      $_SESSION['TYPE'] = 'GOOGLE';
       $_SESSION['SUCCESS'] = "Successfully Logged in!";
       header("Location: ../index.php");
       return;

@@ -25,13 +25,16 @@
       } else {
         // Create a cookie for the logged in user if he wants to be remembered
         if ($_POST['remember-me']) {
-          setcookie("USERINFO[USERID]", $result['uid'], time() + (30*86400), "/");
-          setcookie("USERINFO[NAME]", $result['fname']." ".$result['lname'], time() + (30*86400), "/");
+          setcookie("USERID", $result['uid'], time() + (30*86400), "/");
         }
 
         // Store the user in the session
         $_SESSION['USERID'] = $result['uid'];
         $_SESSION['NAME'] = $result['fname']." ".$result['lname'];
+        $_SESSION['TYPE'] = 'LOGIN';
+        if (!empty($result['profile_pic'])) {
+          $_SESSION['PROFILE-PICTURE'] = $result['profile_pic'];
+        }
         $_SESSION['SUCCESS'] = "Successfully Logged in!";
         header("Location: ../index.php");
         return;
