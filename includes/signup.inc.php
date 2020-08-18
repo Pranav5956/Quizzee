@@ -51,7 +51,10 @@
           ));
 
           // Success - sign in user
-          $_SESSION['SUCCESS'] = "Signup success!";
+          $_SESSION['USERID'] = $conn->lastInsertId();
+          $_SESSION['NAME'] = $_POST['first-name']." ".$_POST['last-name'];
+          $_SESSION['TYPE'] = 'LOGIN';
+          $_SESSION['SUCCESS'] = "Signed in successfully!";
           header("Location: ../index.php");
           return;
         }
