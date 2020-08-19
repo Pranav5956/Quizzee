@@ -1,8 +1,8 @@
 <?php
   session_start();
-  if (isset($_POST['upload'])) {
+
+  if (isset($_POST['upload']) && isset($_SESSION['NAME_URL'])) {
     $file = $_FILES['profile_pic'];
-    print_r($file);
 
     // File attributes
     $file_name = $file['name'];
@@ -38,31 +38,37 @@
 
             $_SESSION['SUCCESS'] = "Updated Profile Picture";
             $_SESSION['PROFILE-PICTURE'] = $file_dest_addr;
-            header("Location: ../index.php");
+            header("Location: ../Users/".$_SESSION['NAME_URL']."/Dashboard");
             return;
           } else {
             $_SESSION['ERROR'] = "Unable to upload Profile Picture!";
-            header("Location: ../index.php");
+            header("Location: ../Users/".$_SESSION['NAME_URL']."/Dashboard");
             return;
           }
         } else {
           $_SESSION['ERROR'] = "Please upload images within 1 MB!";
-          header("Location: ../index.php");
+          header("Location: ../Users/".$_SESSION['NAME_URL']."/Profile");
           return;
         }
       } else {
         $_SESSION['ERROR'] = "Error uploading image.";
-        header("Location: ../index.php");
+        header("Location: ../Users/".$_SESSION['NAME_URL']."/Profile");
         return;
       }
     } else {
       $_SESSION['ERROR'] = "Wrong image type.";
-      header("Location: ../index.php?type=".$file_name);
+      header("Location: ../Users/".$_SESSION['NAME_URL']."/Profile");
       return;
     }
 
   } else {
-    header("Location: ../index.php");
-    return;
+    if (isset($_SESSION['NAME_URL'])) {
+      header("Location: ../Users/".$_SESSION['NAME_URL']."/Dashboard");
+      return;
+    } else {
+      header("Location: ../Quizee");
+      return;
+    }
+
   }
 ?>

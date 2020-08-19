@@ -31,12 +31,14 @@
         // Store the user in the session
         $_SESSION['USERID'] = $result['uid'];
         $_SESSION['NAME'] = $result['fname']." ".$result['lname'];
+        $_SESSION['NAME_URL'] = str_replace(' ', '', $_SESSION['NAME']);
         $_SESSION['TYPE'] = 'LOGIN';
         if (!empty($result['profile_pic'])) {
           $_SESSION['PROFILE-PICTURE'] = $result['profile_pic'];
         }
         $_SESSION['SUCCESS'] = "Successfully Logged in!";
-        header("Location: ../index.php");
+        // header("Location: ../index.php");
+        header("Location: ../Users/".$result['fname'].$result['lname']."/Dashboard");
         return;
       }
     }

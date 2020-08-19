@@ -22,6 +22,13 @@
 		$_SESSION['PROFILE-PICTURE'] = $result['profile_pic'];
 		$_SESSION['TYPE'] = $result['login'];
 	}
+
+	if (!isset($_SESSION['USERID']) && strpos($_SERVER['REQUEST_URI'], 'Users') !== false) {
+		$url = preg_filter('/Users\/\w*\/Dashboard/', 'Quizee', $_SERVER['REQUEST_URI']);
+		printf($url);
+		header("Location: ".$url);
+		return;
+	}
 ?>
 
 
@@ -35,10 +42,10 @@ img{
 }
 </style>
 
-
+<base href="/" />
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	<a class="navbar-brand" href="index.php">Quizzee</a>
+	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Quizzee</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -50,24 +57,28 @@ img{
 				  <span class="caret"></span></button>
 				  <ul class="dropdown-menu bg-dark">
 						<?php if (isset($_SESSION['PROFILE-PICTURE'])): ?>
-							<img src=<?php echo htmlentities($_SESSION['PROFILE-PICTURE']) ?> alt="Profile Image" class="rounded-circle img-fluid" style="width: 110px; height: 110px;">
+							<?php if ($_SESSION['TYPE'] == 'LOGIN'): ?>
+								<img src=<?php echo '/OnlineQuizManagement/'.htmlentities($_SESSION['PROFILE-PICTURE']) ?> alt="Profile Image" class="rounded-circle img-fluid" style="width: 110px; height: 110px;">
+							<?php else: ?>
+								<img src=<?php echo htmlentities($_SESSION['PROFILE-PICTURE']) ?> alt="Profile Image" class="rounded-circle img-fluid" style="width: 110px; height: 110px;">
+							<?php endif; ?>
 						<?php else: ?>
 							<img src="https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png" alt="No Profile Image" class="rounded-circle" style="width:110px;height:110px;">
 						<?php endif; ?>
 						<form>
 							<?php if ($_SESSION['TYPE'] == 'LOGIN'): ?>
-								<li><input type="submit" name="action" value="Change Profile Picture"
-											 title="Click to upload Profile Picture" class="btn btn-dark" formaction="change.php" formmethod="get"></li>
+								<li><button type="submit" name="action" value="changeprofilepic"
+											      title="Click to update Profile Picture" class="btn btn-dark" formaction=<?php echo str_replace('Dashboard', 'Profile', $_SERVER['REQUEST_URI']) ?> formmethod="get">Change Profile Picture</button></li>
 							<?php endif; ?>
 							<li><input type="submit" name="logout-submit" value="Logout"
-										 title="Click to Logout" class="btn btn-dark" formaction="includes/logout.inc.php" formmethod="post"></li>
+										     title="Click to Logout" class="btn btn-dark" formaction="/OnlineQuizManagement/includes/logout.inc.php" formmethod="post"></li>
 						</form>
 				  </ul>
 				</div>
 
 			<?php else: ?>
-				<a class="nav-link btn btn-dark" href="login.php"> Login </a><br>
-				<a class="nav-link btn btn-dark" href="signup.php"> Signup </a>
+				<a class="nav-link btn btn-dark" href="/OnlineQuizManagement/Login"> Login </a><br>
+				<a class="nav-link btn btn-dark" href="/OnlineQuizManagement/Signup"> Signup </a>
 			<?php endif; ?>
 		</ul>
 	</div>

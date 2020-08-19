@@ -54,10 +54,12 @@
       if ($exists_query->rowCount() > 0) {
         $_SESSION['USERID'] = $exists_query->fetch(PDO::FETCH_ASSOC)['uid'];
         $_SESSION['NAME'] = $fname." ".$lname;
+        $_SESSION['NAME_URL'] = str_replace(' ', '', $_SESSION['NAME']);
+
         $_SESSION['PROFILE-PICTURE'] = $profilepic;
         $_SESSION['TYPE'] = 'GOOGLE';
         $_SESSION['SUCCESS'] = "Logged in!";
-        header("Location: ../index.php");
+        header("Location: /OnlineQuizManagement/Users/".$_SESSION['NAME_URL']."/Dashboard");
         return;
       } else {
         // Create the user in the database
@@ -74,14 +76,15 @@
       // Set user credentials
       $_SESSION['USERID'] = $conn->lastInsertId();
       $_SESSION['NAME'] = $fname." ".$lname;
+      $_SESSION['NAME_URL'] = str_replace(' ', '', $_SESSION['NAME']);
       $_SESSION['PROFILE-PICTURE'] = $profilepic;
       $_SESSION['TYPE'] = 'GOOGLE';
       $_SESSION['SUCCESS'] = "Successfully Logged in!";
-      header("Location: ../index.php");
+      header("Location: /OnlineQuizManagement/Users/".$_SESSION['NAME_URL']."/Dashboard");
       return;
     } else {
       $_SESSION['ERROR'] = "Cannot login with Google Account!";
-      header("Location: ../login.php");
+      header("Location: /OnlineQuizManagement/Login");
       return;
     }
   }
