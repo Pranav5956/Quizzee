@@ -23,9 +23,16 @@
 		$_SESSION['TYPE'] = $result['login'];
 	}
 
-	if (!isset($_SESSION['USERID']) && strpos($_SERVER['REQUEST_URI'], 'my/dashboard') !== false) {
-		header("Location: ".str_replace("my/dashboard", "quizzee", $_SERVER['REQUEST_URI']));
-		return;
+	if (!isset($_SESSION['USERID'])) {
+		if (strpos($_SERVER['REQUEST_URI'], 'my/dashboard') !== false) {
+			header("Location: ".str_replace("my/dashboard", "quizzee", $_SERVER['REQUEST_URI']));
+			return;
+		}
+	} else {
+		if (strpos($_SERVER['REQUEST_URI'], 'quizzee') !== false) {
+			header("Location: ".str_replace("quizzee", "my/dashboard", $_SERVER['REQUEST_URI']));
+			return;
+		}
 	}
 ?>
 
@@ -57,11 +64,13 @@ img{
 						<?php endif; ?>
 						<form>
 							<?php if ($_SESSION['TYPE'] == 'LOGIN'): ?>
-								<li><button type="submit" name="action" value="changeprofilepic"
-											      title="Click to update Profile Picture" class="btn btn-dark" formaction="edit-profile" formmethod="post">Change Profile Picture</button></li>
+								<li><button type="submit" name="action" value="change-profile-pic"
+											      title="Click to update Profile Picture" class="btn btn-dark" formaction="profile">Change Profile Picture</button></li>
 							<?php endif; ?>
 							<li><input type="submit" name="logout-submit" value="Logout"
 										     title="Click to Logout" class="btn btn-dark" formaction="../includes/logout.inc.php" formmethod="post"></li>
+							<li><button type="submit" name="action" value="create"
+											   title="Click to Logout" class="btn btn-dark" formaction="quiz" formmethod="get"> Create Quiz </button></li>
 						</form>
 				  </ul>
 				</div>
@@ -73,7 +82,3 @@ img{
 		</ul>
 	</div>
 </nav>
-
-<?php if (isset($_SESSION['USERID'])): ?>
-	<a href="create-quiz"> Create Quiz </a>
-<?php endif; ?>

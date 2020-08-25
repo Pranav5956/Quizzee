@@ -53,31 +53,44 @@ var DEFAULT_OPTION_CONTEXT = (option_number) => "Option " + option_number;
 */
 
 $(document).ready(function() {
-  $('#add-question').click(function() {
-    if (question_count == 0) {
-      $('#form-editable-prompt').remove();
-      $('#form-preview-prompt').html('Preview:');
+  // Receive GET Parameters
+  let get = window.location.search.split('?');
+  if (get.length > 1) {
+    let uri_params = get[1].split('&');
+    let params = {};
+    $.each(uri_params, function(index) {
+      let param = uri_params[index].split('=');
+      params[param[0]] = param[1];
+    });
+
+    if ('action' in params) {
+      $('#add-question').click(function() {
+        if (question_count == 0) {
+          $('#form-editable-prompt').remove();
+          $('#form-preview-prompt').html('Preview:');
+        }
+        question_count++;
+        if (question_count > 1)
+          $("#remove-question").attr("hidden", false);
+
+        createEditableQuestion(question_count);
+        createPreviewQuestion(question_count);
+
+        // Remove question button
+        $("#remove-question")
+        .click(function() {
+          if (question_count > 1) {
+            $("#editable-question-" + question_count + "-container").remove();
+            $("#preview-question-" + question_count + "-container").remove();
+            question_count--;
+          }
+          if (question_count == 1) {
+            $(this).attr("hidden", true);
+          }
+        })
+      });
     }
-    question_count++;
-    if (question_count > 1)
-      $("#remove-question").attr("hidden", false);
-
-    createEditableQuestion(question_count);
-    createPreviewQuestion(question_count);
-
-    // Remove question button
-    $("#remove-question")
-    .click(function() {
-      if (question_count > 1) {
-        $("#editable-question-" + question_count + "-container").remove();
-        $("#preview-question-" + question_count + "-container").remove();
-        question_count--;
-      }
-      if (question_count == 1) {
-        $(this).attr("hidden", true);
-      }
-    })
-  });
+  }
 });
 
 function createEditableQuestion(question_number) {

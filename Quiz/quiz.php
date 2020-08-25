@@ -1,3 +1,5 @@
+<base href="/Quizzee/Quiz/">
+<?php require_once "../header.php"; ?>
 <body>
   <script
   src="https://code.jquery.com/jquery-3.5.1.js"

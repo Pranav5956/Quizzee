@@ -4,7 +4,7 @@ RewriteEngine on
 
 RewriteRule ^quizzee$ index.php
 RewriteRule ^my/dashboard$ index.php [L]
-RewriteRule ^my/edit-profile$ profile.php [L]
-RewriteRule ^my/create-quiz$ Quiz/quiz.php [L]
+RewriteRule ^my/profile$ profile.php [L]
+RewriteRule ^my/quiz Quiz/quiz.php [L]
 RewriteRule ^login$ login.php
 RewriteRule ^signup$ signup.php
