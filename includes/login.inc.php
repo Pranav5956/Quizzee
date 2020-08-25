@@ -6,7 +6,7 @@
     // Login processing
     if (empty($_POST['email']) || empty($_POST['password'])) {
       $_SESSION['ERROR'] = "Fill all fields";
-      header("Location: ../login.php");
+      header("Location: ../login");
       return;
     } else {
       $login_query = $conn->prepare("SELECT * FROM Users
@@ -20,7 +20,7 @@
 
       if ($result == false) {
         $_SESSION['ERROR'] = "Wrong email or password";
-        header("Location: ../login.php");
+        header("Location: ../login");
         return;
       } else {
         // Create a cookie for the logged in user if he wants to be remembered
@@ -31,14 +31,13 @@
         // Store the user in the session
         $_SESSION['USERID'] = $result['uid'];
         $_SESSION['NAME'] = $result['fname']." ".$result['lname'];
-        $_SESSION['NAME_URL'] = str_replace(' ', '', $_SESSION['NAME']);
         $_SESSION['TYPE'] = 'LOGIN';
         if (!empty($result['profile_pic'])) {
           $_SESSION['PROFILE-PICTURE'] = $result['profile_pic'];
         }
         $_SESSION['SUCCESS'] = "Successfully Logged in!";
         // header("Location: ../index.php");
-        header("Location: ../Users/".$result['fname'].$result['lname']."/Dashboard");
+        header("Location: ../my/dashboard");
         return;
       }
     }
@@ -48,7 +47,7 @@
     google_login($conn);
   } else {
     $_SESSION['ERROR'] = "Please Log in to continue";
-    header("Location: ../index.php");
+    header("Location: ../quizzee");
     return;
   }
 ?>

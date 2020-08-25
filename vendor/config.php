@@ -9,7 +9,7 @@
   // Setting the credentials and other settings
   $google_client->setClientId($CLIENT_ID);
   $google_client->setClientSecret($CLIENT_SECRET);
-  $google_client->setRedirectUri("http://localhost/OnlineQuizManagement/includes/login.inc.php");
+  $google_client->setRedirectUri("http://localhost/Quizzee/includes/login.inc.php");
   unset($CLIENT_ID);
   unset($CLIENT_SECRET);
 
@@ -59,7 +59,7 @@
         $_SESSION['PROFILE-PICTURE'] = $profilepic;
         $_SESSION['TYPE'] = 'GOOGLE';
         $_SESSION['SUCCESS'] = "Logged in!";
-        header("Location: /OnlineQuizManagement/Users/".$_SESSION['NAME_URL']."/Dashboard");
+        header("Location: ../my/dashboard");
         return;
       } else {
         // Create the user in the database
@@ -80,11 +80,11 @@
       $_SESSION['PROFILE-PICTURE'] = $profilepic;
       $_SESSION['TYPE'] = 'GOOGLE';
       $_SESSION['SUCCESS'] = "Successfully Logged in!";
-      header("Location: /OnlineQuizManagement/Users/".$_SESSION['NAME_URL']."/Dashboard");
+      header("Location: ../my/dashboard");
       return;
     } else {
       $_SESSION['ERROR'] = "Cannot login with Google Account!";
-      header("Location: /OnlineQuizManagement/Login");
+      header("Location: ../login");
       return;
     }
   }

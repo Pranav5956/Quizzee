@@ -2,7 +2,7 @@
   require_once "header.php";
   include_once "vendor/config.php";
   if (isset($_SESSION['USERID'])) {
-    header("Location: Users/".$_SESSION['NAME_URL']."/Dashboard");
+    header("Location: my/dashboard");
     return;
   }
 
@@ -39,7 +39,7 @@ h1,label{
       Login with Google
       </a>
       <br><br>
-      <a href="signup.php">Don't have an account?</a>
+      <a href="signup">Don't have an account?</a>
   </div>
 </div>
 

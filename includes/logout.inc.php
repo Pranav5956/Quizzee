@@ -11,5 +11,5 @@
     setcookie("USERID", '', time()-1, "/");
     session_destroy();
   }
-  header("Location: /OnlineQuizManagement/Quizee");
+  header("Location: ../quizzee");
 ?>

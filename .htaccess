@@ -1,7 +1,10 @@
+Options -Indexes
+
 RewriteEngine on
 
-RewriteRule ^Quizee index.php
-RewriteRule ^Users/(\w+)/Dashboard?$ index.php [L]
-RewriteRule ^Users/[\w]+/Profile$ profile.php [L]
-RewriteRule ^Login login.php
-RewriteRule ^Signup signup.php
+RewriteRule ^quizzee$ index.php
+RewriteRule ^my/dashboard$ index.php [L]
+RewriteRule ^my/edit-profile$ profile.php [L]
+RewriteRule ^my/create-quiz$ Quiz/quiz.php [L]
+RewriteRule ^login$ login.php
+RewriteRule ^signup$ signup.php

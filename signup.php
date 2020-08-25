@@ -3,7 +3,7 @@
   include_once "vendor/config.php";
 
 	if (isset($_SESSION['USERID'])) {
-		header("Location: Users/".$_SESSION['NAME_URL']."/Dashboard");
+		header("Location: my/dashboard");
 		return;
 	}
 
@@ -61,6 +61,6 @@ h1{
 			<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
 			Signup with Google
 		</a><br>
-			<br><a href="login.php">Already have an account?</a>
+			<br><a href="login">Already have an account?</a>
 		</div>
 </div>

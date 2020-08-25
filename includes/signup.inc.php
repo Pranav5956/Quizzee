@@ -9,14 +9,14 @@
         empty($_POST['confirm-password'])) {
       // Fill all fields - rollback nothing
       $_SESSION['ERROR'] = "Fill all fields";
-      header("Location: ../Signup");
+      header("Location: ../signup");
       return;
     } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
       // Invalid email - rollback first-name and last-name
       $_SESSION['ERROR'] = "Invalid email";
       $params = "fname=".urlencode($_POST['first-name']).
                 "&lname=".urlencode($_POST['last-name']);
-      header("Location: ../Signup?".$params);
+      header("Location: ../signup?".$params);
       return;
     } elseif ($_POST['confirm-password'] != $_POST['password']) {
       // Wrong confirmation password - rollback first-name, last-name and email
@@ -24,7 +24,7 @@
       $params = "fname=".urlencode($_POST['first-name']).
                 "&lname=".urlencode($_POST['last-name']).
                 "&email=".urlencode($_POST['email']);
-      header("Location: ../Signup?".$params);
+      header("Location: ../signup?".$params);
       return;
     } else {
       try {
@@ -36,7 +36,7 @@
 
         if ($exists_query->rowCount() > 0) {
           $_SESSION['ERROR'] = "There is already an account with the same Email ID";
-          header("Location: ../Signup");
+          header("Location: ../signup");
           return;
         } else {
           // Create a new Users entry in the database
@@ -53,16 +53,15 @@
           // Success - sign in user
           $_SESSION['USERID'] = $conn->lastInsertId();
           $_SESSION['NAME'] = $_POST['first-name']." ".$_POST['last-name'];
-          $_SESSION['NAME_URL'] = str_replace(' ', '', $_SESSION['NAME']);
           $_SESSION['TYPE'] = 'LOGIN';
           $_SESSION['SUCCESS'] = "Signed in successfully!";
-          header("Location: ../Users/".$_SESSION['NAME_URL']."/Dashboard");
+          header("Location: ../my/dashboard");
           return;
         }
       } catch (Exception $e) {
         // Failure - redirect the user
         $_SESSION['ERROR'] = "Signup failure!";
-        header("Location: ../Signup");
+        header("Location: ../signup");
         return;
       }
     }
@@ -72,7 +71,7 @@
     google_login($conn);
   } else {
     // User not logged in - redirect to landing page
-    header("Location: ../Quizee");
+    header("Location: ../quizzee");
     return;
   }
 ?>
