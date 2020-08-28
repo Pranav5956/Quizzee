@@ -23,6 +23,7 @@
 		$_SESSION['TYPE'] = $result['login'];
 	}
 
+	// Reroute based on user's login status
 	if (!isset($_SESSION['USERID'])) {
 		if (strpos($_SERVER['REQUEST_URI'], 'my/dashboard') !== false) {
 			header("Location: ".str_replace("my/dashboard", "quizzee", $_SERVER['REQUEST_URI']));
@@ -33,6 +34,16 @@
 			header("Location: ".str_replace("quizzee", "my/dashboard", $_SERVER['REQUEST_URI']));
 			return;
 		}
+
+		// Fetch user's created quizzes
+		require_once "includes/db.inc.php";
+		$selectQuizQuery = $conn->prepare("SELECT uqid, qname
+																			 FROM quizzes
+																			 WHERE uid = :uid");
+		$selectQuizQuery->execute(array(
+			":uid" => $_SESSION['USERID']
+		));
+		$quizzes = $selectQuizQuery->fetchAll(PDO::FETCH_ASSOC);
 	}
 ?>
 
@@ -67,11 +78,11 @@ img{
 								<li><button type="submit" name="action" value="change-profile-pic"
 											      title="Click to update Profile Picture" class="btn btn-dark" formaction="profile">Change Profile Picture</button></li>
 							<?php endif; ?>
+							<li><button type="submit" name="action" value="create"
+											   title="Click to Logout" class="btn btn-dark" formaction="quizzes/create" formmethod="get"> Create Quiz </button></li>
 							<li><input type="submit" name="logout-submit" value="Logout"
 										     title="Click to Logout" class="btn btn-dark" formaction="../includes/logout.inc.php" formmethod="post"></li>
-							<li><button type="submit" name="action" value="create"
-											   title="Click to Logout" class="btn btn-dark" formaction="quiz" formmethod="get"> Create Quiz </button></li>
-						</form>
+							</form>
 				  </ul>
 				</div>
 
@@ -82,3 +93,12 @@ img{
 		</ul>
 	</div>
 </nav>
+
+<?php if (isset($quizzes) && count($quizzes)): ?>
+	<p>Created Quizzes:</p>
+	<?php foreach ($quizzes as $quiz_index => $quiz_attributes): ?>
+		<div class="quiz-link-container">
+			<a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>
+		</div>
+	<?php endforeach; ?>
+<?php endif; ?>

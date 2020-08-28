@@ -203,7 +203,7 @@ function createEditableQuestion(question_number) {
       // True option
       $("#editable-question-" + question_number + "-option-1-input")
       .val("True")
-      .attr("disabled", true);
+      .attr("readonly", true);
       $("#preview-question-" + question_number + "-option-1-label")
       .text("True");
       $("#editable-question-" + question_number + "-option-1-buttons-container").remove();
@@ -211,7 +211,7 @@ function createEditableQuestion(question_number) {
       // False option
       $("#editable-question-" + question_number + "-option-2-input")
       .val("False")
-      .attr("disabled", true);
+      .attr("readonly", true);
       $("#preview-question-" + question_number + "-option-2-label")
       .text("False");
       $("#editable-question-" + question_number + "-option-2-buttons-container").remove();
@@ -402,7 +402,7 @@ function createEditableQuestion(question_number) {
     $('<input></input>')
     .attr("type", option_type)
     .attr("id", "editable-question-" + question_number + "-option-" + option_number + "-isanswer-input")
-    .attr("name", "editable-question-" + question_number + "-option-" + option_number + "-isanswer")
+    .attr("name", "editable-question-" + question_number + "-option-isanswer")
     .addClass("editable-question-option-isanswer")
     .change(function() {
       $("#preview-question-" + question_number + "-option-" + option_number + "-display").prop("checked", $(this).prop("checked"));
@@ -443,10 +443,10 @@ function createEditableQuestion(question_number) {
     .attr("id", "editable-question-" + question_number + "-option-" + option_number + "-input")
     .attr("name", "editable-question-" + question_number + "-option-" + option_number)
     .attr("placeholder", "Answer goes here")
-    .attr("disabled", true)
+    .attr("readonly", true)
     .width(390)
     .height(75)
-    .addClass("editable-question-option-input")
+    .addClass("editable-question-option-descriptive-input")
     .appendTo($("#editable-question-" + question_number + "-option-" + option_number + "-input-container"));
 
     // preview
@@ -524,4 +524,34 @@ function createPreviewQuestion(question_number) {
   .attr("id", "preview-question-" + question_number + "-attributes-container")
   .addClass("preview-question-attributes-container")
   .appendTo($("#preview-question-" + question_number + "-container"));
+}
+
+// VALIDATION
+function validateQuiz() {
+  let isValid = true;
+  $(".editable-question-description-input").each(function() {
+    if ($(this).val() == "") {
+      alert("Fill all the Question Descriptions");
+      isValid = false;
+      return false;
+    }
+  })
+
+  $(".editable-question-type-select").each(function() {
+    if ($(this).children("option:selected").val() == "N") {
+      alert("Choose a question type");
+      isValid = false;
+      return false;
+    }
+  })
+
+  $(".editable-question-option-input").each(function() {
+    if ($(this).val() == "") {
+      alert("Fill all the Option Descriptions");
+      isValid = false;
+      return false;
+    }
+  })
+
+  return isValid;
 }
