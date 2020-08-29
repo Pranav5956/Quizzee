@@ -78,7 +78,7 @@ img{
 								<li><button type="submit" name="action" value="change-profile-pic"
 											      title="Click to update Profile Picture" class="btn btn-dark" formaction="profile">Change Profile Picture</button></li>
 							<?php endif; ?>
-							<li><button type="submit" id="create" title="Click to Logout" class="btn btn-dark" onclick="return createQuiz();"> Create Quiz </button></li>
+							<li><button type="submit" id="create" title="Create Quiz" class="btn btn-dark" onclick="return createQuiz();"> Create Quiz </button></li>
 							<li><input type="submit" name="logout-submit" value="Logout"
 										     title="Click to Logout" class="btn btn-dark" formaction="../includes/logout.inc.php" formmethod="post"></li>
 							</form>
