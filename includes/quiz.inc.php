@@ -47,19 +47,41 @@
       }
 
       elseif (!is_array($current_question_number) && isset($current_option_number) &&
-              $quiz_param == "editable-question-".$current_question_number."-option-isanswer") {
+              preg_match("/.*isanswer$/", $quiz_param) === 1) {
         $question_options[$current_question_number][$current_option_number]["isanswer"] = 1;
       }
     }
 
     require_once "db.inc.php";
+    if (isset($_GET['uqid'])) {
+      $deleteOptionsQuery = $conn->prepare("DELETE FROM options WHERE qnid IN (
+                                              SELECT qnid FROM questions WHERE qid IN (
+                                                SELECT qid FROM quizzes WHERE uqid=:uqid
+                                              )
+                                            );");
+      $deleteOptionsQuery->execute(array(
+        ":uqid" => $_GET['uqid']
+      ));
+
+      $deleteQuestionsQuery = $conn->prepare("DELETE FROM questions WHERE qid IN (
+                                                SELECT qid FROM quizzes WHERE uqid=:uqid
+                                              );");
+      $deleteQuestionsQuery->execute(array(
+        ":uqid" => $_GET['uqid']
+      ));
+
+      $deleteQuizQuery = $conn->prepare("DELETE FROM quizzes WHERE uqid=:uqid;");
+      $deleteQuizQuery->execute(array(
+        ":uqid" => $_GET['uqid']
+      ));
+    }
 
     function createQuiz($quiz_name) {
       global $conn;
       $insertQuizQuery = $conn->prepare("INSERT INTO quizzes(uqid, qname, create_time, uid)
                                          VALUES(:uqid, :qname, :create_time, :uid)");
       $insertQuizQuery->execute(array(
-        ":uqid" => uniqid("Q"),
+        ":uqid" => 'Q'.md5(time()),
         ":qname" => $quiz_name,
         ":create_time" => time(),
         ":uid" => $_SESSION['USERID']
@@ -104,12 +126,11 @@
 
       foreach ($question_options[$question_number] as $option_number => $option_attributes) {
         if ($option_number == null)
-          createOption($question_id, 0, null, 0);
+          createOption($current_question_id, 0, null, 0);
         else
           createOption($current_question_id, $option_number, $option_attributes["description"], $option_attributes["isanswer"]);
       }
     }
   }
-
   header("Location: ../my/dashboard");
 ?>

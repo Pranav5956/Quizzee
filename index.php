@@ -78,8 +78,7 @@ img{
 								<li><button type="submit" name="action" value="change-profile-pic"
 											      title="Click to update Profile Picture" class="btn btn-dark" formaction="profile">Change Profile Picture</button></li>
 							<?php endif; ?>
-							<li><button type="submit" name="action" value="create"
-											   title="Click to Logout" class="btn btn-dark" formaction="quizzes/create" formmethod="get"> Create Quiz </button></li>
+							<li><button type="submit" id="create" title="Click to Logout" class="btn btn-dark" onclick="return createQuiz();"> Create Quiz </button></li>
 							<li><input type="submit" name="logout-submit" value="Logout"
 										     title="Click to Logout" class="btn btn-dark" formaction="../includes/logout.inc.php" formmethod="post"></li>
 							</form>
@@ -94,11 +93,21 @@ img{
 	</div>
 </nav>
 
+<script type="text/javascript">
+	function createQuiz() {
+		console.log(1);
+		document.location.replace("quizzes/create");
+		return false;
+	}
+</script>
+
 <?php if (isset($quizzes) && count($quizzes)): ?>
 	<p>Created Quizzes:</p>
 	<?php foreach ($quizzes as $quiz_index => $quiz_attributes): ?>
 		<div class="quiz-link-container">
-			<a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>
+			<a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href=<?php echo 'quizzes/delete/'.urlencode($quiz_attributes['uqid']) ?>> Delete </a>
 		</div>
 	<?php endforeach; ?>
 <?php endif; ?>

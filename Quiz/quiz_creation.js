@@ -54,16 +54,35 @@ var DEFAULT_OPTION_CONTEXT = (option_number) => "Option " + option_number;
 
 $(document).ready(function() {
   // Receive GET Parameters
-  let get = window.location.search.split('?');
-  if (get.length > 1) {
-    let uri_params = get[1].split('&');
-    let params = {};
-    $.each(uri_params, function(index) {
-      let param = uri_params[index].split('=');
-      params[param[0]] = param[1];
-    });
+  let split = 'http://localhost/Quizzee/my/quizzes/'.length;
+  let params = window.location.href.substr(split).split('/');
 
-    if ('action' in params) {
+  if (params.length >= 1) {
+    if (params[0] == 'edit' || params[0] == 'create') {
+      if (params[0] == 'edit') {
+        // Load the existing questions
+        $.get("quiz.parse.php?uqid=" + params[1], function(response) {
+          response = JSON.parse(response);
+
+          $.each(response, function(key, value) {
+            if (key == "quiz") {
+              $("#quiz-name").val(value["qname"]);
+            } else {
+              question_count++;
+              createPreviewQuestion(question_count);
+              createEditableQuestion(question_count, value["description"], value["type"], value["options"]);
+            }
+          });
+        })
+        .then(function() {
+          if (question_count > 0) {
+            $('#form-editable-prompt').remove();
+            $('#form-preview-prompt').html('Preview:');
+            $("#remove-question").attr("hidden", false);
+          }
+        });
+      }
+
       $('#add-question').click(function() {
         if (question_count == 0) {
           $('#form-editable-prompt').remove();
@@ -75,25 +94,25 @@ $(document).ready(function() {
 
         createEditableQuestion(question_count);
         createPreviewQuestion(question_count);
-
-        // Remove question button
-        $("#remove-question")
-        .click(function() {
-          if (question_count > 1) {
-            $("#editable-question-" + question_count + "-container").remove();
-            $("#preview-question-" + question_count + "-container").remove();
-            question_count--;
-          }
-          if (question_count == 1) {
-            $(this).attr("hidden", true);
-          }
-        })
       });
+
+      // Remove question button
+      $("#remove-question")
+      .click(function() {
+        if (question_count > 1) {
+          $("#editable-question-" + question_count + "-container").remove();
+          $("#preview-question-" + question_count + "-container").remove();
+          question_count--;
+        }
+        if (question_count == 1) {
+          $(this).attr("hidden", true);
+        }
+      })
     }
   }
 });
 
-function createEditableQuestion(question_number) {
+function createEditableQuestion(question_number, description="", type="", options=[]) {
   // Create the question container
   $('<div></div>')
   .attr("id", "editable-question-" + question_number + "-container")
@@ -116,6 +135,7 @@ function createEditableQuestion(question_number) {
   .attr("id", "editable-question-" + question_number + "-description-input")
   .attr("name", "editable-question-" + question_number + "-description")
   .attr("placeholder", "Enter Question Description here")
+  .val(description)
   .width(390)
   .height(75)
   .addClass("editable-question-description-input")
@@ -128,6 +148,10 @@ function createEditableQuestion(question_number) {
       $("#preview-question-" + question_number + "-description")
       .text(question_number + ". " + $(this).val());
   });
+
+  if (description)
+    $("#preview-question-" + question_number + "-description")
+    .text(question_number + ". " + $("#editable-question-" + question_number + "-description-input").val());
 
   // Attach the Question Type selection
   var option_count = 0;
@@ -148,16 +172,18 @@ function createEditableQuestion(question_number) {
   .attr("name", "editable-question-" + question_number + "-type")
   .addClass("editable-question-type-select")
   .change(function() {
-    addAttributesToQuestion($(this).children("option:selected").val(), question_number);
+    addAttributesToQuestion($(this).children("option:selected").val());
   })
   .ready(function() {
-    addAttributesToQuestion('N', question_number);
+    if (type == "")
+      addAttributesToQuestion('N');
   })
   .appendTo($("#editable-question-" + question_number + "-type-container"));
 
   $.each(QUESTION_TYPES, function(type_key, type_value) {
     $('<option></option>')
     .addClass('editable-question-type-select-option')
+    .attr('selected', (type == type_key))
     .text(type_value)
     .val(type_key)
     .appendTo($("#editable-question-" + question_number + "-type-select"));
@@ -169,12 +195,21 @@ function createEditableQuestion(question_number) {
   .addClass("editable-question-attributes-container")
   .appendTo($("#editable-question-" + question_number + "-container"));
 
+  // Add existing Attributes
+  var option_count = 0;
+  if (Object.keys(options).length) {
+    $.each(options, function(key, attributes) {
+      addAttributesToQuestion(type, attributes[0], attributes[1], false);
+    })
+  }
+
   // Add Attributes and increase option count
-  function addAttributesToQuestion(question_type) {
+  function addAttributesToQuestion(question_type, description="", isanswer="0", clear=true) {
     // Clear all existing attributes
-    option_count = 0;
-    $("#editable-question-" + question_number + "-attributes-container").empty()
-    $("#preview-question-" + question_number + "-attributes-container").empty()
+    if (clear) {
+      $("#editable-question-" + question_number + "-attributes-container").empty()
+      $("#preview-question-" + question_number + "-attributes-container").empty()
+    }
 
     // Modify to contain basic attributes
     if (question_type == 'N') {
@@ -190,30 +225,23 @@ function createEditableQuestion(question_number) {
       .addClass("preview-question-type-prompt")
       .appendTo($("#preview-question-" + question_number + "-attributes-container"));
     } else if (question_type == "MCQ") {
-      addMCOption("radio");
+      addMCOption("radio", description, isanswer);
     } else if (question_type == "MCMQ") {
-      addMCOption("checkbox");
+      addMCOption("checkbox", description, isanswer);
     } else if (question_type == "D") {
       addDescriptiveOption();
       $("#editable-question-" + question_number + "-buttons-container").remove();
     } else if (question_type == "TF") {
-      addMCOption("radio");
-      addMCOption("radio");
+      if (description.length) {
+        addMCOption("radio", description, isanswer);
+      } else {
+        addMCOption("radio", "True", isanswer);
+        addMCOption("radio", "False", isanswer);
+      }
 
       // True option
-      $("#editable-question-" + question_number + "-option-1-input")
-      .val("True")
-      .attr("readonly", true);
-      $("#preview-question-" + question_number + "-option-1-label")
-      .text("True");
       $("#editable-question-" + question_number + "-option-1-buttons-container").remove();
-
       // False option
-      $("#editable-question-" + question_number + "-option-2-input")
-      .val("False")
-      .attr("readonly", true);
-      $("#preview-question-" + question_number + "-option-2-label")
-      .text("False");
       $("#editable-question-" + question_number + "-option-2-buttons-container").remove();
     }
 
@@ -260,7 +288,7 @@ function createEditableQuestion(question_number) {
     .appendTo($("#preview-question-" + question_number + "-attributes-container"));
   }
 
-  function addMCOption(option_type) {
+  function addMCOption(option_type, description="", isanswer="0") {
     option_count++;
     let option_number = option_count;
     addOptionContainers();
@@ -281,6 +309,7 @@ function createEditableQuestion(question_number) {
     .attr("id", "editable-question-" + question_number + "-option-" + option_number + "-input")
     .attr("name", "editable-question-" + question_number + "-option-" + option_number)
     .addClass("editable-question-option-input")
+    .val(description)
     .attr("placeholder", DEFAULT_OPTION_CONTEXT(option_number) + " Description")
     .change(function() {
       if ($(this).val() == "")
@@ -403,11 +432,16 @@ function createEditableQuestion(question_number) {
     .attr("type", option_type)
     .attr("id", "editable-question-" + question_number + "-option-" + option_number + "-isanswer-input")
     .attr("name", "editable-question-" + question_number + "-option-isanswer")
+    .prop("checked", (isanswer == "1"))
     .addClass("editable-question-option-isanswer")
     .change(function() {
       $("#preview-question-" + question_number + "-option-" + option_number + "-display").prop("checked", $(this).prop("checked"));
     })
     .appendTo($("#editable-question-" + question_number + "-option-" + option_number + "-isanswer-container"));
+
+    if (option_type == "checkbox")
+      $("#editable-question-" + question_number + "-option-" + option_number + "-isanswer-input")
+      .attr("name", "editable-question-" + question_number + "-option-" + option_number + "-isanswer");
 
     $('<label></label>')
     .attr("id", "editable-question-" + question_number + "-option-" + option_number + "-isanswer-label")
@@ -420,6 +454,7 @@ function createEditableQuestion(question_number) {
     $('<input></input>')
     .attr("type", option_type)
     .attr("id", "preview-question-" + question_number + "-option-" + option_number + "-display")
+    .prop("checked", (isanswer == "1"))
     .attr("disabled", true)
     .attr("name", "preview-question-" + question_number + "-options")
     .addClass("preview-question-option-display")
@@ -429,7 +464,7 @@ function createEditableQuestion(question_number) {
     .attr("id", "preview-question-" + question_number + "-option-" + option_number + "-label")
     .attr("for", "preview-question-" + question_number + "-option-" + option_number + "-display")
     .addClass("preview-question-option-label")
-    .text(DEFAULT_OPTION_CONTEXT(option_number))
+    .text((description)? description : DEFAULT_OPTION_CONTEXT(option_number))
     .appendTo($("#preview-question-" + question_number + "-option-" + option_number + "-container"));
   }
 
@@ -498,6 +533,8 @@ function createEditableQuestion(question_number) {
       .prop("checked", swap_to_preview_checked);
     }
   }
+
+  // return addAttributesToQuestion;
 }
 
 function createPreviewQuestion(question_number) {
