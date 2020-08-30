@@ -130,20 +130,20 @@ input[type=submit]{
 }
 input[type="radio"].preview-question-option-display {
   display: none;
+  transition: background 100ms ease,font-weight 100ms ease, color 100ms ease;
 }
 input[type="radio"].preview-question-option-display:checked + label{
-  background: #FFF;
-  color: #000;
-  border: 2px solid blue;
-  transition: border 100ms ease;
+  background:#03DAC6;
+  color:black;
+  font-weight: bold;
 }
 input[type="checkbox"].preview-question-option-display {
   display: none;
+  transition: background 100ms ease,font-weight 100ms ease, color 100ms ease;
 }
 
 input[type="checkbox"].preview-question-option-display:checked + label{
-  background: #FFF;
-  color: #000;
-  border: 2px solid blue;
-  transition: border 100ms ease;
+  background:#03DAC6;
+  color:black;
+  font-weight: bold;
 }

@@ -36,34 +36,39 @@
     }
   }
 ?>
+<div class="row">
+  <div class="col-3"></div>
+  <div class=col-6>
+    <?php if (isset($_GET['uqid'])): ?>
+      <h1><?php echo $quiz['qname'] ?></h1>
+      <?php foreach ($questions as $qn_index => $question_attributes): ?>
+        <div class="preview-question-container">
+          <p class="preview-question-description"><?php echo htmlentities($question_attributes['question_number'].'. '.$question_attributes['description'],
+                                     ENT_QUOTES, 'utf-8'); ?></p>
 
-<?php if (isset($_GET['uqid'])): ?>
-  <h1><?php echo $quiz['qname'] ?></h1>
-  <?php foreach ($questions as $qn_index => $question_attributes): ?>
-    <div class="preview-question-container">
-      <p class="preview-question-description"><?php echo htmlentities($question_attributes['question_number'].'. '.$question_attributes['description'],
-                                 ENT_QUOTES, 'utf-8'); ?></p>
+          <?php foreach ($options[$question_attributes['question_number']] as $op_index => $option_attributes): ?>
+            <div class="preview-question-option-container">
+              <?php if ($question_attributes['type'] == 'MCQ' || $question_attributes['type'] == 'TF'): ?>
+                <input type="radio" class="preview-question-option-display" name=<?php echo $question_attributes['question_number']; ?>
+                       id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
+                <label class="preview-question-option-label" for=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
+                  <?php echo htmlentities($option_attributes['description'], ENT_QUOTES, 'utf-8'); ?>
+                </label>
+              <?php elseif ($question_attributes['type'] == 'MCMQ'): ?>
+                <input type="checkbox" class="preview-question-option-display" name=<?php echo $question_attributes['question_number']; ?>
+                       id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
+                <label class="preview-question-option-label" for=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
+                  <?php echo htmlentities($option_attributes['description'], ENT_QUOTES, 'utf-8'); ?>
+                </label>
+              <?php elseif ($question_attributes['type'] == 'D'): ?>
+                <textarea rows="8" cols="60" placeholder="Enter answer here"></textarea>
+              <?php endif; ?>
+            </div>
 
-      <?php foreach ($options[$question_attributes['question_number']] as $op_index => $option_attributes): ?>
-        <div class="preview-question-option-container">
-          <?php if ($question_attributes['type'] == 'MCQ' || $question_attributes['type'] == 'TF'): ?>
-            <input type="radio" class="preview-question-option-display" name=<?php echo $question_attributes['question_number']; ?>
-                   id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
-            <label class="preview-question-option-label" for=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
-              <?php echo htmlentities($option_attributes['description'], ENT_QUOTES, 'utf-8'); ?>
-            </label>
-          <?php elseif ($question_attributes['type'] == 'MCMQ'): ?>
-            <input type="checkbox" class="preview-question-option-display" name=<?php echo $question_attributes['question_number']; ?>
-                   id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
-            <label class="preview-question-option-label" for=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
-              <?php echo htmlentities($option_attributes['description'], ENT_QUOTES, 'utf-8'); ?>
-            </label>
-          <?php elseif ($question_attributes['type'] == 'D'): ?>
-            <textarea rows="8" cols="60" placeholder="Enter answer here"></textarea>
-          <?php endif; ?>
+          <?php endforeach; ?>
         </div>
-
       <?php endforeach; ?>
-    </div>
-  <?php endforeach; ?>
-<?php endif; ?>
+    <?php endif; ?>
+  </div>
+  <div class="col-3"></div>
+</div>
