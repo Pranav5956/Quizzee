@@ -65,8 +65,8 @@ img{
 }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Quizzee</a>
+<nav class="navbar navbar-expand-lg navbar-dark" style="z-index:1;">
+	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Q</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -87,7 +87,6 @@ img{
 								<li><button type="submit" name="action" value="change-profile-pic"
 											      title="Click to update Profile Picture" class="btn btn-dark" formaction="profile">Change Profile Picture</button></li>
 							<?php endif; ?>
-							<li><button type="submit" id="create" title="Create Quiz" class="btn btn-dark" onclick="return createQuiz();"> Create Quiz </button></li>
 							<li><input type="submit" name="logout-submit" value="Logout"
 										     title="Click to Logout" class="btn btn-dark" formaction="../includes/logout.inc.php" formmethod="post"></li>
 							</form>
@@ -102,6 +101,58 @@ img{
 	</div>
 </nav>
 
+
+
+
+<?php if (isset($_SESSION['USERID'])): ?>
+		<link rel="stylesheet" href="../dashboard_style.css">
+		<div class="row">
+			<div class="col-3">
+
+			</div>
+			<div class="col-9">
+				<?php if (isset($quizzes) && count($quizzes)): ?>
+					<?php foreach ($quizzes as $quiz_index => $quiz_attributes): ?>
+					<div class="card float-left created-quiz">
+						<div class="card-body">
+						<h5 class="card-header"><a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+						<a class = "card-link btn btn-warning" href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
+						<a class = "card-link btn btn-danger" href=<?php echo 'quizzes/delete/'.urlencode($quiz_attributes['uqid']) ?>> Delete </a>
+					</div>
+					</div>
+					<?php endforeach; ?>
+				<?php endif; ?>
+				<div class="card card-block d-flex" id="new-quiz" onclick="return createQuiz();">
+					<div class="card-body align-items-center d-flex justify-content-center">Create Quiz</div>
+				</div>
+			</div>
+		</div>
+
+
+<?php else: ?>
+	<link rel="stylesheet" href="landing.css">
+	<ul class="slideshow">
+	 <li></li>
+	 <li></li>
+	 <li></li>
+	 <li></li>
+	 <li></li>
+ </ul>
+ <div class="row">
+	 <div class="left-slideshow col-6">
+	 <h1 class="bg-dark">Welcome to Quizzee, an Online Quiz Management System!</h1>
+	 <h1 class="bg-dark">Create, attend, and review quizzes with ease. View quiz performance, quiz history and much more!</h1>
+	 <h1 class="bg-dark">Built with integrated group facilities. Create groups to share and conduct quizzes</h1>
+ </div><div class="right-slideshow col-6">
+	 <h1 class="text-right bg-dark">Enabled with a two-way feedback system. Interact with quiz organisers and quiz takers.</h1>
+	 <h1 class="text-right bg-dark">Login/Signup to get started!</h1>
+ </div>
+ </div>
+</div>
+<?php endif; ?>
+
+
+
 <script type="text/javascript">
 	function createQuiz() {
 		console.log(1);
@@ -109,23 +160,3 @@ img{
 		return false;
 	}
 </script>
-
-<?php if (isset($created_quizzes) && count($created_quizzes)): ?>
-	<p>Created Quizzes:</p>
-	<?php foreach ($created_quizzes as $quiz_index => $quiz_attributes): ?>
-		<div class="quiz-link-container">
-			<a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href=<?php echo 'quizzes/delete/'.urlencode($quiz_attributes['uqid']) ?>> Delete </a>&nbsp;&nbsp;&nbsp;&nbsp;
-		</div>
-	<?php endforeach; ?>
-<?php endif; ?>
-
-<?php if (isset($available_quizzes) && count($available_quizzes)): ?>
-	<p>Available Quizzes:</p>
-	<?php foreach ($available_quizzes as $quiz_index => $quiz_attributes): ?>
-		<div class="quiz-link-container">
-			<a href=<?php echo 'quizzes/authenticate/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>
-		</div>
-	<?php endforeach; ?>
-<?php endif; ?>
