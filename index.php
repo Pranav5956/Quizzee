@@ -43,7 +43,16 @@
 		$selectQuizQuery->execute(array(
 			":uid" => $_SESSION['USERID']
 		));
-		$quizzes = $selectQuizQuery->fetchAll(PDO::FETCH_ASSOC);
+		$created_quizzes = $selectQuizQuery->fetchAll(PDO::FETCH_ASSOC);
+
+		// Fetch available quizzes
+		$selectQuizQuery = $conn->prepare("SELECT uqid, qname
+																			 FROM quizzes
+																			 WHERE uid <> :uid");
+		$selectQuizQuery->execute(array(
+			":uid" => $_SESSION['USERID']
+		));
+		$available_quizzes = $selectQuizQuery->fetchAll(PDO::FETCH_ASSOC);
 	}
 ?>
 
@@ -96,18 +105,27 @@ img{
 <script type="text/javascript">
 	function createQuiz() {
 		console.log(1);
-		document.location.replace("quizzes/create");
+		window.location.assign("quizzes/create");
 		return false;
 	}
 </script>
 
-<?php if (isset($quizzes) && count($quizzes)): ?>
+<?php if (isset($created_quizzes) && count($created_quizzes)): ?>
 	<p>Created Quizzes:</p>
-	<?php foreach ($quizzes as $quiz_index => $quiz_attributes): ?>
+	<?php foreach ($created_quizzes as $quiz_index => $quiz_attributes): ?>
 		<div class="quiz-link-container">
 			<a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href=<?php echo 'quizzes/delete/'.urlencode($quiz_attributes['uqid']) ?>> Delete </a>
+			<a href=<?php echo 'quizzes/delete/'.urlencode($quiz_attributes['uqid']) ?>> Delete </a>&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
+	<?php endforeach; ?>
+<?php endif; ?>
+
+<?php if (isset($available_quizzes) && count($available_quizzes)): ?>
+	<p>Available Quizzes:</p>
+	<?php foreach ($available_quizzes as $quiz_index => $quiz_attributes): ?>
+		<div class="quiz-link-container">
+			<a href=<?php echo 'quizzes/authenticate/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>
 		</div>
 	<?php endforeach; ?>
 <?php endif; ?>

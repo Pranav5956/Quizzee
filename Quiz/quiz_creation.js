@@ -67,6 +67,7 @@ $(document).ready(function() {
           $.each(response, function(key, value) {
             if (key == "quiz") {
               $("#quiz-name").val(value["qname"]);
+              $("#quiz-type-select>option[value=" + value['type'] + "]").prop("selected", true);
             } else {
               question_count++;
               createPreviewQuestion(question_count);
@@ -79,6 +80,11 @@ $(document).ready(function() {
             $('#form-editable-prompt').remove();
             $('#form-preview-prompt').html('Preview:');
             $("#remove-question").attr("hidden", false);
+          }
+
+          if ($("#quiz-type-select").children("option:selected").val() != "C") {
+            $('.quiz-code-container').hide();
+            $('#quiz-code-display').prop("disabled", true);
           }
         });
       }
@@ -107,7 +113,32 @@ $(document).ready(function() {
         if (question_count == 1) {
           $(this).attr("hidden", true);
         }
+      });
+
+      // Change quiz type
+      $("#quiz-type-select")
+      .change(function() {
+        if ($(this).children("option:selected").val() == "C") {
+          $('.quiz-code-container').show();
+          $('#quiz-code-display').prop("disabled", false);
+        }
+        else {
+          $('.quiz-code-container').hide();
+          $('#quiz-code-display').prop("disabled", true);
+        }
       })
+
+      if ($("#quiz-type-select").children("option:selected").val() != "C") {
+        $('.quiz-code-container').hide();
+        $('#quiz-code-display').prop("disabled", true);
+      }
+
+      $("#quiz-code-display")
+      .click(function() {
+        $(this).select();
+        // $(this).setSelectionRange(0, 99999); /*For mobile devices*/
+        document.execCommand("copy");
+      });
     }
   }
 });
@@ -172,6 +203,7 @@ function createEditableQuestion(question_number, description="", type="", option
   .attr("name", "editable-question-" + question_number + "-type")
   .addClass("editable-question-type-select")
   .change(function() {
+    option_count = 0;
     addAttributesToQuestion($(this).children("option:selected").val());
   })
   .ready(function() {
@@ -196,15 +228,14 @@ function createEditableQuestion(question_number, description="", type="", option
   .appendTo($("#editable-question-" + question_number + "-container"));
 
   // Add existing Attributes
-  var option_count = 0;
   if (Object.keys(options).length) {
     $.each(options, function(key, attributes) {
-      addAttributesToQuestion(type, attributes[0], attributes[1], false);
+      addAttributesToQuestion(type, attributes[0], attributes[1], false, attributes[2]);
     })
   }
 
   // Add Attributes and increase option count
-  function addAttributesToQuestion(question_type, description="", isanswer="0", clear=true) {
+  function addAttributesToQuestion(question_type, description="", isanswer="0", clear=true, mark=0) {
     // Clear all existing attributes
     if (clear) {
       $("#editable-question-" + question_number + "-attributes-container").empty()
@@ -225,15 +256,15 @@ function createEditableQuestion(question_number, description="", type="", option
       .addClass("preview-question-type-prompt")
       .appendTo($("#preview-question-" + question_number + "-attributes-container"));
     } else if (question_type == "MCQ") {
-      addMCOption("radio", description, isanswer);
+      addMCOption("radio", description, isanswer, mark);
     } else if (question_type == "MCMQ") {
-      addMCOption("checkbox", description, isanswer);
+      addMCOption("checkbox", description, isanswer, mark);
     } else if (question_type == "D") {
-      addDescriptiveOption();
+      addDescriptiveOption(mark);
       $("#editable-question-" + question_number + "-buttons-container").remove();
     } else if (question_type == "TF") {
       if (description.length) {
-        addMCOption("radio", description, isanswer);
+        addMCOption("radio", description, isanswer, mark);
       } else {
         addMCOption("radio", "True", isanswer);
         addMCOption("radio", "False", isanswer);
@@ -288,7 +319,7 @@ function createEditableQuestion(question_number, description="", type="", option
     .appendTo($("#preview-question-" + question_number + "-attributes-container"));
   }
 
-  function addMCOption(option_type, description="", isanswer="0") {
+  function addMCOption(option_type, description="", isanswer="0", mark=0) {
     option_count++;
     let option_number = option_count;
     addOptionContainers();
@@ -450,6 +481,28 @@ function createEditableQuestion(question_number, description="", type="", option
     .text("Correct answer?")
     .appendTo($("#editable-question-" + question_number + "-option-" + option_number + "-isanswer-container"));
 
+    // Mark input
+    $('<div>')
+    .prop("id", "editable-question-" + question_number + "-option-" + option_number + "-mark-container")
+    .addClass("editable-question-option-mark-container")
+    .appendTo($("#editable-question-" + question_number + "-option-" + option_number + "-container"));
+
+    $('<label>')
+    .attr("for", "#editable-question-" + question_number + "-option-" + option_number + "-mark-input")
+    .text("Allotted marks: ")
+    .addClass("editable-question-option-mark-label")
+    .appendTo("#editable-question-" + question_number + "-option-" + option_number + "-mark-container");
+
+    $('<input>')
+    .prop("id", "editable-question-" + question_number + "-option-" + option_number + "-mark-input")
+    .prop("type", "number")
+    .prop("name", "editable-question-" + question_number + "-option-" + option_number + "-mark")
+    .prop("max", 50)
+    .prop("min", -10)
+    .val(mark)
+    .addClass("editable-question-option-mark-input")
+    .appendTo("#editable-question-" + question_number + "-option-" + option_number + "-mark-container");
+
     // Create preview option
     $('<input></input>')
     .attr("type", option_type)
@@ -468,7 +521,7 @@ function createEditableQuestion(question_number, description="", type="", option
     .appendTo($("#preview-question-" + question_number + "-option-" + option_number + "-container"));
   }
 
-  function addDescriptiveOption() {
+  function addDescriptiveOption(mark=0) {
     option_count++;
     let option_number = option_count;
     addOptionContainers();
@@ -483,6 +536,28 @@ function createEditableQuestion(question_number, description="", type="", option
     .height(75)
     .addClass("editable-question-option-descriptive-input")
     .appendTo($("#editable-question-" + question_number + "-option-" + option_number + "-input-container"));
+
+    // Mark input
+    $('<div>')
+    .prop("id", "editable-question-" + question_number + "-option-" + option_number + "-mark-container")
+    .addClass("editable-question-option-mark-container")
+    .appendTo($("#editable-question-" + question_number + "-option-" + option_number + "-container"));
+
+    $('<label>')
+    .attr("for", "#editable-question-" + question_number + "-option-" + option_number + "-mark-input")
+    .text("Allotted marks: ")
+    .addClass("editable-question-option-mark-label")
+    .appendTo("#editable-question-" + question_number + "-option-" + option_number + "-mark-container");
+
+    $('<input>')
+    .prop("id", "editable-question-" + question_number + "-option-" + option_number + "-mark-input")
+    .prop("type", "number")
+    .prop("name", "editable-question-" + question_number + "-option-" + option_number + "-mark")
+    .prop("max", 50)
+    .prop("min", -10)
+    .val(mark)
+    .addClass("editable-question-option-mark-input")
+    .appendTo("#editable-question-" + question_number + "-option-" + option_number + "-mark-container");
 
     // preview
     $('<textarea></textarea>')

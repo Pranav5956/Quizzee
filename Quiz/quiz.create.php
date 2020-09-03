@@ -19,8 +19,20 @@ crossorigin="anonymous"></script>
 <!-- Quiz Editable -->
 <div class="row m-5">
   <div class="col-6">
-    <div class="form-name-container">
+    <div id="form-info" class="form-name-container">
       <input type="text" form="form-editable" id="quiz-name" name="quiz-name" placeholder="Enter the Quiz Name" form="form-editable" required>
+      <div class="quiz-type-container">
+        <label for="quiz-type-select">Select a Quiz Type: </label>
+        <select form="form-editable" class="quiz-type-select" name="quiz-type" id="quiz-type-select">
+          <option value="O" selected>Open</option>
+          <option value="C">Code Protected</option>
+          <option value="G">Restricted To Group</option>
+        </select>
+      </div>
+      <div class="quiz-code-container">
+        <label for="quiz-code-display">Quiz Code: </label>
+        <input form="form-editable" id="quiz-code-display" type="text" name="quiz-code" value=<?php echo substr(md5($_SESSION['USERID'].time()), 0, 8); ?> min="8" max="8" readonly>
+      </div>
     </div>
     <form id="form-editable" action=<?php echo $submit_url ?> method="post" class="quiz-form" onsubmit="return validateQuiz();">
       <p id="form-editable-prompt" class="form-quiz-prompt">

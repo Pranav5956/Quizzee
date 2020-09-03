@@ -4,6 +4,7 @@
   if (isset($_POST)) {
     // Collection of Question and their Parameters
     $quiz_name = "";
+    $quiz_code = null;
     $question_descriptions = array();
     $question_types = array();
     $question_options = array();
@@ -15,6 +16,12 @@
     foreach ($_POST as $quiz_param => $quiz_value) {
       if ($quiz_param == "quiz-name")
         $quiz_name = $quiz_value;
+
+      else if ($quiz_param == "quiz-type")
+        $quiz_type = $quiz_value;
+
+      else if ($quiz_param == "quiz-code")
+        $quiz_code = $quiz_value;
 
       elseif (preg_match("/^editable-question-(\d+)-description$/", $quiz_param, $question_number) === 1) {
         $current_question_number = $question_number[1];
@@ -37,11 +44,12 @@
 
         if (isset($current_question_type) && isset($current_question_number) && $current_question_number == $question_number) {
           if ($current_question_type == "D")
-            $question_options[$current_question_number] = array(null => null);
+            $question_options[$current_question_number][1] = array("mark" => 0);
           else
             $question_options[$current_question_number][$current_option_number] = array(
               "description" => $quiz_value,
-              "isanswer" => 0
+              "isanswer" => 0,
+              "mark" => 0
             );
         }
       }
@@ -49,6 +57,11 @@
       elseif (!is_array($current_question_number) && isset($current_option_number) &&
               preg_match("/.*isanswer$/", $quiz_param) === 1) {
         $question_options[$current_question_number][$current_option_number]["isanswer"] = 1;
+      }
+
+      elseif (!is_array($current_question_number) && isset($current_option_number) &&
+              preg_match("/.*mark$/", $quiz_param) === 1) {
+        $question_options[$current_question_number][$current_option_number]["mark"] = $quiz_value;
       }
     }
 
@@ -76,16 +89,19 @@
       ));
     }
 
-    function createQuiz($quiz_name) {
+    function createQuiz($quiz_name, $quiz_type, $quiz_code) {
       global $conn;
-      $insertQuizQuery = $conn->prepare("INSERT INTO quizzes(uqid, qname, create_time, uid)
-                                         VALUES(:uqid, :qname, :create_time, :uid)");
-      $insertQuizQuery->execute(array(
-        ":uqid" => 'Q'.md5(time()),
-        ":qname" => $quiz_name,
-        ":create_time" => time(),
-        ":uid" => $_SESSION['USERID']
-      ));
+      $insertQuizQuery = $conn->prepare("INSERT INTO quizzes(uqid, qname, type, code, create_time, uid)
+                                         VALUES(:uqid, :qname, :type, :code, :create_time, :uid)");
+
+       $insertQuizQuery->execute(array(
+         ":uqid" => 'Q'.md5(time()),
+         ":qname" => $quiz_name,
+         ":type" => $quiz_type,
+         ":code" => $quiz_code,
+         ":create_time" => time(),
+         ":uid" => $_SESSION['USERID']
+       ));
       return $conn->lastInsertId();
     }
 
@@ -102,14 +118,15 @@
       return $conn->lastInsertId();
     }
 
-    function createOption($question_id, $option_number, $option_description, $option_isanswer) {
+    function createOption($question_id, $option_number, $option_description, $option_isanswer, $option_mark) {
       global $conn;
-      $insertQuizQuery = $conn->prepare("INSERT INTO options(option_number, description, isanswer, qnid)
-                                         VALUES(:option_number, :description, :isanswer, :qnid)");
+      $insertQuizQuery = $conn->prepare("INSERT INTO options(option_number, description, isanswer, weightage, qnid)
+                                         VALUES(:option_number, :description, :isanswer, :weightage, :qnid)");
       $insertQuizQuery->execute(array(
         ":option_number" => $option_number,
         ":description" => $option_description,
         ":isanswer" => $option_isanswer,
+        ":weightage" => $option_mark,
         ":qnid" => $question_id
       ));
     }
@@ -118,17 +135,21 @@
     $current_quiz_id = null;
     $current_question_id = null;
 
-    $current_quiz_id = createQuiz($quiz_name);
+    $current_quiz_id = createQuiz($quiz_name, $quiz_type, $quiz_code);
     unset($_POST);
 
     foreach ($question_descriptions as $question_number => $description) {
       $current_question_id = createQuestion($current_quiz_id, $question_number, $description, $question_types[$question_number]);
+      printf($current_question_id);
 
       foreach ($question_options[$question_number] as $option_number => $option_attributes) {
-        if ($option_number == null)
-          createOption($current_question_id, 0, null, 0);
-        else
-          createOption($current_question_id, $option_number, $option_attributes["description"], $option_attributes["isanswer"]);
+        if ($question_types[$question_number] == "D") {
+          createOption($current_question_id, 0, null, 0, $option_attributes['mark']);
+        }
+        else {
+          createOption($current_question_id, $option_number, $option_attributes["description"], $option_attributes["isanswer"],
+                       $option_attributes["mark"]);
+        }
       }
     }
   }

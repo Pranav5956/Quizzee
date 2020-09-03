@@ -1,37 +1,67 @@
 <base href="/Quizzee/Quiz/">
 <?php
   require_once "../header.php";
+  require_once '../includes/db.inc.php';
 
-  if ($_GET['action'] == "create" || ($_GET['action'] == "edit" && isset($_GET['uqid']))) {
-    require_once "quiz.create.php";
-  } elseif ($_GET['action'] == "view" && isset($_GET['uqid'])) {
-    require_once "quiz.view.php";
-  } elseif ($_GET['action'] == "attend" && isset($_GET['uqid'])) {
-    require_once "quiz.attend.php";
-  } elseif ($_GET['action'] == "delete" && isset($_GET['uqid'])) {
-    if (isset($_GET['uqid'])) {
-      require_once '../includes/db.inc.php';
-      $deleteOptionsQuery = $conn->prepare("DELETE FROM options WHERE qnid IN (
-                                              SELECT qnid FROM questions WHERE qid IN (
-                                                SELECT qid FROM quizzes WHERE uqid=:uqid
-                                              )
-                                            );");
-      $deleteOptionsQuery->execute(array(
-        ":uqid" => $_GET['uqid']
+  if ($_GET['action'] != 'create') {
+    if ($_GET['uqid'] != "") {
+      $selectQuizQuery = $conn->prepare("SELECT uid
+                                         FROM quizzes
+                                         WHERE uqid = :uqid");
+      $selectQuizQuery->execute(array(
+        ":uqid" => urldecode($_GET['uqid'])
       ));
-
-      $deleteQuestionsQuery = $conn->prepare("DELETE FROM questions WHERE qid IN (
-                                                SELECT qid FROM quizzes WHERE uqid=:uqid
-                                              );");
-      $deleteQuestionsQuery->execute(array(
-        ":uqid" => $_GET['uqid']
-      ));
-
-      $deleteQuizQuery = $conn->prepare("DELETE FROM quizzes WHERE uqid=:uqid;");
-      $deleteQuizQuery->execute(array(
-        ":uqid" => $_GET['uqid']
-      ));
+      $user_id = $selectQuizQuery->fetch(PDO::FETCH_ASSOC)['uid'];
     }
+  }
+
+  if ($_GET['action'] == "edit") {
+    if ($user_id != $_SESSION['USERID']) {
+      header("Location: ../../dashboard");
+      return;
+    }
+    require_once "quiz.create.php";
+  } else if ($_GET['action'] == "create") {
+    require_once "quiz.create.php";
+  } elseif ($_GET['action'] == "view") {
+    if ($user_id != $_SESSION['USERID']) {
+      if ($_GET['attemptno'] == "") {
+        header("Location: ../../../dashboard");
+        return;
+      }
+    }
+    require_once "quiz.view.php";
+  } elseif ($_GET['action'] == "delete") {
+    $deleteOptionsQuery = $conn->prepare("DELETE FROM options WHERE qnid IN (
+                                            SELECT qnid FROM questions WHERE qid IN (
+                                              SELECT qid FROM quizzes WHERE uqid=:uqid
+                                            )
+                                          );");
+    $deleteOptionsQuery->execute(array(
+      ":uqid" => $_GET['uqid']
+    ));
+
+    $deleteQuestionsQuery = $conn->prepare("DELETE FROM questions WHERE qid IN (
+                                              SELECT qid FROM quizzes WHERE uqid=:uqid
+                                            );");
+    $deleteQuestionsQuery->execute(array(
+      ":uqid" => $_GET['uqid']
+    ));
+
+    $deleteQuizQuery = $conn->prepare("DELETE FROM quizzes WHERE uqid=:uqid;");
+    $deleteQuizQuery->execute(array(
+      ":uqid" => $_GET['uqid']
+    ));
+
     header("Location: ../../dashboard");
+  } elseif ($_GET['action'] == "authenticate") {
+      require_once "quiz.authenticate.php";
+  } elseif ($_GET['action'] == "attempt") {
+      require_once "quiz.attempt.php";
+  } elseif ($_GET['action'] == "responses") {
+      require_once "quiz.responses.php";
+  }  elseif ($_GET['action'] == "export") {
+      require_once "quiz.export.php";
   }
 ?>
+<link rel="stylesheet" href="quiz_edit.css">
