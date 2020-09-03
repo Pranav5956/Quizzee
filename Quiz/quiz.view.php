@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="quiz_edit.css">
+<link rel="stylesheet" href="quiz_style.css">
 <?php
   if (isset($_GET['uqid'])) {
     require_once "../includes/db.inc.php";
@@ -37,10 +37,10 @@
   }
 ?>
 <div class="row">
-  <div class="col-3"></div>
-  <div class=col-6>
+  <div class="col-3 side"></div>
+  <div class="col-6 main">
     <?php if (isset($_GET['uqid'])): ?>
-      <h1><?php echo $quiz['qname'] ?></h1>
+      <h1 style="margin:2rem;color:white;"><?php echo $quiz['qname'] ?></h1>
       <?php foreach ($questions as $qn_index => $question_attributes): ?>
         <div class="preview-question-container">
           <p class="preview-question-description"><?php echo htmlentities($question_attributes['question_number'].'. '.$question_attributes['description'],
@@ -70,5 +70,5 @@
       <?php endforeach; ?>
     <?php endif; ?>
   </div>
-  <div class="col-3"></div>
+  <div class="col-3 side"></div>
 </div>

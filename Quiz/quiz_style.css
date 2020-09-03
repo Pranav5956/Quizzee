@@ -1,27 +1,36 @@
-.sidenav{
-  height: 100%; /* Full-height: remove this if you want "auto" height */
-  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  z-index: 1; /* Stay on top */
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding: 4rem;
+
+.quiz-edit{
+  background-color: rgba(0,0,0,.05);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid black;
 }
 
 #form-editable-prompt{
   margin: 2rem 0;
 }
 
-body,input[type=text],select{
-background: #121212;
-color: white;
-border:none;
+#quiz-name{
+  border: 2px solid black;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+body{
+  background: rgba(0,0,0,.09);
+}
+
+input[type=text],select{
+background: white
+border:3px solid black;
 }
 
 
 .editable-question-container{
-  background: #1F1B24;
+  background:rgba(0,0,0,.09);
   padding: 2rem;
   border: 2px solid;
-  border-radius: 5px;
+  border-radius: 8px;
   margin: 2rem 0;
 }
 
@@ -29,8 +38,6 @@ border:none;
   border: 2px solid;
   border-radius: 8px;
   margin: 1rem 0 1rem 0;
-  background: #121212;
-  color: white
 }
 .editable-question-type-select{
   margin-left: 1rem;
@@ -40,8 +47,6 @@ border:none;
 }
 
 .editable-question-option-input{
-  background: #121212;
-  color: white;
   border: 2px solid grey;
   border-radius: 4px;
   padding: 0.25rem;
@@ -49,9 +54,7 @@ border:none;
 }
 
 textarea{
-  background: #121212;
   margin-top: 1rem;
-  color: white;
   border-radius: 8px;
   border: 2px solid grey;
 }
@@ -60,34 +63,34 @@ textarea{
 .editable-question-option-buttons-remove,
 .editable-question-option-buttons-up,
 .editable-question-option-buttons-down{
-  background-color: #BB86FC;
+  background-color: #17a2b8;
   margin: 0.5rem 1rem 0.5rem 0;
   border-radius: 8px;
-  border: none;
-  font-weight: bold;
+  border: 1px solid black;
 }
 .editable-question-button-clear{
   margin: 0.5rem 0 0 0;;
   border-radius: 8px;
   border: none;
-  background-color: #CF6679;
-  font-weight: 600;
+  color: white;
+  background-color: #dc3545;
 }
 .editable-question-option-isanswer-label{
     margin-left: 0.5rem;
 }
 
 #add-question,#remove-question{
-  background-color: #3700B3;
+  background-color:#007bff;
   color: white;
   padding: 0.5em;
   margin-right: 0.5em;
   border-radius: 8px;
   margin-bottom: 1rem;
   border:none;
+  color: black;
 }
 input[type=submit]{
-  background-color: #03DAC6;
+  background-color: #28a745;
   color: black;
   padding: 0.5em 2em;
   border:none;
@@ -96,14 +99,27 @@ input[type=submit]{
 }
 
 /*form preview styling starts*/
+
+.main{
+  background: #121212;
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 4rem;
+}
+.quiz-preview{
+  background: #121212;
+  border: 2px solid white;
+  border-radius: 8px;
+}
+
+
+
 .preview-question-container{
   margin: 2rem;
   padding: 2rem;
-}
-.preview-question-container:hover{
   border: 2px solid white;
   border-radius: 4px;
-    transition: border 200ms linear;
+  color: white;
 }
 
 .preview-question-description{
@@ -126,7 +142,6 @@ input[type=submit]{
 .preview-question-option-label:hover{
   background: #fff;
   color: black;
-  border-radius: 8px
 }
 input[type="radio"].preview-question-option-display {
   display: none;
