@@ -64,19 +64,18 @@ img{
 	margin:10px;
 }
 </style>
-
-<nav class="navbar navbar-expand-lg navbar-dark" style="z-index:1;">
-	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Q</a>
+<?php if (isset($_SESSION['USERID'])): ?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="z-index:1;">
+	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Quizzee</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav ml-auto">
-			<?php if (isset($_SESSION['USERID'])): ?>
 				<div class="dropdown">
-				  <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">Signed In as <?php echo htmlentities($_SESSION['NAME'], ENT_QUOTES, 'utf-8'); ?>
+				  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Signed In as <?php echo htmlentities($_SESSION['NAME'], ENT_QUOTES, 'utf-8'); ?>
 				  <span class="caret"></span></button>
-				  <ul class="dropdown-menu bg-dark">
+				  <ul class="dropdown-menu bg-primary">
 						<?php if (isset($_SESSION['PROFILE-PICTURE'])): ?>
 							<img src=<?php echo $_SESSION['PROFILE-PICTURE'] ?> alt="Profile Image" class="rounded-circle img-fluid" style="width: 110px; height: 110px;">
 						<?php else: ?>
@@ -85,49 +84,68 @@ img{
 						<form>
 							<?php if ($_SESSION['TYPE'] == 'LOGIN'): ?>
 								<li><button type="submit" name="action" value="change-profile-pic"
-											      title="Click to update Profile Picture" class="btn btn-dark" formaction="profile">Change Profile Picture</button></li>
+											      title="Click to update Profile Picture" class="btn btn-primary" formaction="profile">Change Profile Picture</button></li>
 							<?php endif; ?>
 							<li><input type="submit" name="logout-submit" value="Logout"
-										     title="Click to Logout" class="btn btn-dark" formaction="../includes/logout.inc.php" formmethod="post"></li>
+										     title="Click to Logout" class="btn btn-primary" formaction="../includes/logout.inc.php" formmethod="post"></li>
 							</form>
 				  </ul>
 				</div>
+			</ul>
+		</div>
+	</nav>
+	<?php else: ?>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="z-index:1;">
+			<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Quizzee</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav ml-auto">
+					<a class="nav-link btn btn-dark" href="login"> Login </a><br>
+					<a class="nav-link btn btn-dark" href="signup"> Signup </a>
+					</ul>
+				</div>
+			</nav>
 
-			<?php else: ?>
-				<a class="nav-link btn btn-dark" href="login"> Login </a><br>
-				<a class="nav-link btn btn-dark" href="signup"> Signup </a>
-			<?php endif; ?>
-		</ul>
-	</div>
-</nav>
-
-
-
+	<?php endif; ?>
 
 <?php if (isset($_SESSION['USERID'])): ?>
 		<link rel="stylesheet" href="../dashboard_style.css">
+		<div class="row heading"><div class="col-3"></div><div class="col-6">Created Quizzes</div></div>
 		<div class="row">
-			<div class="col-3">
-
-			</div>
+			<div class="col-3"></div>
 			<div class="col-9">
-				<?php if (isset($quizzes) && count($quizzes)): ?>
-					<?php foreach ($quizzes as $quiz_index => $quiz_attributes): ?>
-					<div class="card float-left created-quiz">
-						<div class="card-body">
-						<h5 class="card-header"><a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>&nbsp;&nbsp;&nbsp;&nbsp;</h5>
-						<a class = "card-link btn btn-warning" href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
-						<a class = "card-link btn btn-danger" href=<?php echo 'quizzes/delete/'.urlencode($quiz_attributes['uqid']) ?>> Delete </a>
-					</div>
-					</div>
+				<?php if (isset($created_quizzes) && count($created_quizzes)): ?>
+					<?php foreach ($created_quizzes as $quiz_index => $quiz_attributes): ?>
+						<div class="card float-left created-quiz">
+							<div class="card-header"><a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+							<div class="card-body">
+								<a class="card-link btn btn-outline-success" href=<?php echo 'quizzes/responses/'.urlencode($quiz_attributes['uqid']) ?>> View Responses </a>&nbsp;&nbsp;&nbsp;&nbsp;
+								<a class="card-link btn btn-outline-warning" href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
+								<a class="card-link btn btn-outline-danger" href=<?php echo 'quizzes/delete/'.urlencode($quiz_attributes['uqid']) ?>> Delete </a>&nbsp;&nbsp;&nbsp;&nbsp;
+							</div>
+						</div>
 					<?php endforeach; ?>
 				<?php endif; ?>
-				<div class="card card-block d-flex" id="new-quiz" onclick="return createQuiz();">
-					<div class="card-body align-items-center d-flex justify-content-center">Create Quiz</div>
+				<div class="card card-block d-flex quizTitle" onclick="return createQuiz();">
+					<div class="card-body align-items-center d-flex justify-content-center" style="color:#007bff;">Create Quiz</div>
 				</div>
 			</div>
 		</div>
-
+		<div class="row heading"><div class="col-3"></div><div class="col-6">Available Quizzes</div></div>
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-9">
+				<?php if (isset($available_quizzes) && count($available_quizzes)): ?>
+					<?php foreach ($available_quizzes as $quiz_index => $quiz_attributes): ?>
+						<div class="card float-left card-block d-flex quizTitle">
+						<a class="card-body align-items-center d-flex justify-content-center" href=<?php echo 'quizzes/authenticate/'.urlencode($quiz_attributes['uqid']) ?>><?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?></a>
+						</div>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			</div>
+		</div>
 
 <?php else: ?>
 	<link rel="stylesheet" href="landing.css">

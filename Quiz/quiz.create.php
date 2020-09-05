@@ -8,7 +8,7 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
 
-<link rel="stylesheet" href="quiz_style.css">
+
 
 <script
 src="https://code.jquery.com/jquery-3.5.1.js"

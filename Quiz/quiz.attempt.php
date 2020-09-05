@@ -55,46 +55,53 @@
     // print_r($_POST);
   }
 ?>
-<!-- <link rel="stylesheet" href=""> -->
-<?php if (isset($_POST['attempt'])): ?>
-  <div class="quiz-attempt">
-    <h1><?php echo $quiz_params['qname'] ?></h1>
-    <form class="form-attempt" action="../includes/quiz_attempt.inc.php" method="post">
-      <input type="text" id="uqid" name="uqid" value=<?php echo $_GET['uqid']; ?> hidden>
-      <?php foreach ($quiz_details as $question_index => $question_attributes): ?>
-        <div class="preview-question-container">
-          <div class="preview-question-description-container">
-            <p class="preview-question-description"><?php echo ($question_index + 1).". ".$question_attributes["description"] ?></p>
-          </div>
-          <?php foreach ($question_attributes["options"] as $option_index => $option_attributes): ?>
-            <div class="preview-question-option-container">
-              <?php if ($question_attributes['type'] == 'MCQ' || $question_attributes['type'] == 'TF'): ?>
-                <input type="radio" class="preview-question-option-display" name=<?php echo $question_attributes['question_number']; ?>
-                       id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
-                <label class="preview-question-option-label" for=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
-                  <?php echo htmlentities($option_attributes['description'], ENT_QUOTES, 'utf-8'); ?>
-                </label>
-              <?php elseif ($question_attributes['type'] == 'MCMQ'): ?>
-                <input type="checkbox" class="preview-question-option-display" name=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>
-                       id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
-                <label class="preview-question-option-label" for=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
-                  <?php echo htmlentities($option_attributes['description'], ENT_QUOTES, 'utf-8'); ?>
-                </label>
-              <?php elseif ($question_attributes['type'] == 'D'): ?>
-                <textarea rows="8" cols="60" id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>
-                  name=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?> placeholder="Enter answer here"></textarea>
-              <?php endif; ?>
+<link rel="stylesheet" href="quiz_style.css">
+<div class="row">
+<div class="col-3"></div>
+<div class="col-6 main">
+  <?php if (isset($_POST['attempt'])): ?>
+    <div class="quiz-attempt">
+      <h1 class="quiz-header"><?php echo $quiz_params['qname'] ?></h1>
+      <form class="form-attempt" action="../includes/quiz_attempt.inc.php" method="post">
+        <input type="text" id="uqid" name="uqid" value=<?php echo $_GET['uqid']; ?> hidden>
+        <?php foreach ($quiz_details as $question_index => $question_attributes): ?>
+          <div class="preview-question-container">
+            <div class="preview-question-description-container">
+              <p class="preview-question-description"><?php echo ($question_index + 1).". ".$question_attributes["description"] ?></p>
             </div>
-          <?php endforeach; ?>
-          <?php if ($question_attributes["type"] == "MCQ" || $question_attributes["type"] == "MCMQ" || $question_attributes["type"] == "TF"): ?>
-            <button type="button" name="clear" class="editable-question-button-clear">Clear Selection</button>
-          <?php endif; ?>
-        </div>
-      <?php endforeach; ?>
-      <input type="submit" name="attempt-submit" value="Submit" onclick="format();">
-    </form>
-  </div>
-<?php endif; ?>
+            <?php foreach ($question_attributes["options"] as $option_index => $option_attributes): ?>
+              <div class="preview-question-option-container">
+                <?php if ($question_attributes['type'] == 'MCQ' || $question_attributes['type'] == 'TF'): ?>
+                  <input type="radio" class="preview-question-option-display" name=<?php echo $question_attributes['question_number']; ?>
+                         id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
+                  <label class="preview-question-option-label" for=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
+                    <?php echo htmlentities($option_attributes['description'], ENT_QUOTES, 'utf-8'); ?>
+                  </label>
+                <?php elseif ($question_attributes['type'] == 'MCMQ'): ?>
+                  <input type="checkbox" class="preview-question-option-display" name=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>
+                         id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
+                  <label class="preview-question-option-label" for=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>>
+                    <?php echo htmlentities($option_attributes['description'], ENT_QUOTES, 'utf-8'); ?>
+                  </label>
+                <?php elseif ($question_attributes['type'] == 'D'): ?>
+                  <textarea rows="8" cols="60" id=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?>
+                    name=<?php echo $question_attributes['question_number'].'-'.$option_attributes['option_number']; ?> placeholder="Enter answer here"></textarea>
+                <?php endif; ?>
+              </div>
+            <?php endforeach; ?>
+            <?php if ($question_attributes["type"] == "MCQ" || $question_attributes["type"] == "MCMQ" || $question_attributes["type"] == "TF"): ?>
+              <button type="button" name="clear" class="editable-question-button-clear">Clear Selection</button>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+        <input type="submit" name="attempt-submit" value="Submit" onclick="format();">
+      </form>
+    </div>
+  <?php endif; ?>
+</div>
+<div class="col-3"></div>
+</div>
+
 
 <script type="text/javascript">
   $(".editable-question-button-clear").click( function() {
