@@ -32,6 +32,21 @@
     }
     require_once "quiz.view.php";
   } elseif ($_GET['action'] == "delete") {
+    $deleteResponsesQuery = $conn->prepare("DELETE FROM responses WHERE qid IN (
+                                            SELECT qid FROM quizzes WHERE uqid=:uqid
+                                          );");
+    $deleteResponsesQuery->execute(array(
+      ":uqid" => $_GET['uqid']
+    ));
+
+    $deleteFeedbackQuery = $conn->prepare("DELETE FROM feedback WHERE qnid IN (
+                                            SELECT qnid FROM questions WHERE qid = (
+                                              SELECT qid FROM quizzes WHERE uqid=:uqid)
+                                          );");
+    $deleteFeedbackQuery->execute(array(
+      ":uqid" => $_GET['uqid']
+    ));
+
     $deleteOptionsQuery = $conn->prepare("DELETE FROM options WHERE qnid IN (
                                             SELECT qnid FROM questions WHERE qid IN (
                                               SELECT qid FROM quizzes WHERE uqid=:uqid

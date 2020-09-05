@@ -75,13 +75,15 @@ $(document).ready(function() {
             }
           });
         })
-        .then(function() {
+        .done(function() {
           if (question_count > 0) {
             $('#form-editable-prompt').remove();
             $('#form-preview-prompt').html('Preview:');
             $("#remove-question").attr("hidden", false);
           }
 
+          $('.quiz-code-container').show();
+          $('#quiz-code-display').prop("disabled", false);
           if ($("#quiz-type-select").children("option:selected").val() != "C") {
             $('.quiz-code-container').hide();
             $('#quiz-code-display').prop("disabled", true);

@@ -117,6 +117,7 @@ img{
 			<a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
 			<a href=<?php echo 'quizzes/delete/'.urlencode($quiz_attributes['uqid']) ?>> Delete </a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href=<?php echo 'quizzes/responses/'.urlencode($quiz_attributes['uqid']) ?>> View responses </a>
 		</div>
 	<?php endforeach; ?>
 <?php endif; ?>

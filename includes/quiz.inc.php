@@ -67,8 +67,23 @@
 
     require_once "db.inc.php";
     if (isset($_GET['uqid'])) {
+      $deleteResponsesQuery = $conn->prepare("DELETE FROM responses WHERE qid IN (
+                                              SELECT qid FROM quizzes WHERE uqid=:uqid
+                                            );");
+      $deleteResponsesQuery->execute(array(
+        ":uqid" => $_GET['uqid']
+      ));
+
+      $deleteFeedbackQuery = $conn->prepare("DELETE FROM feedback WHERE qnid IN (
+                                              SELECT qnid FROM questions WHERE qid = (
+                                                SELECT qid FROM quizzes WHERE uqid=:uqid)
+                                            );");
+      $deleteFeedbackQuery->execute(array(
+        ":uqid" => $_GET['uqid']
+      ));
+
       $deleteOptionsQuery = $conn->prepare("DELETE FROM options WHERE qnid IN (
-                                              SELECT qnid FROM questions WHERE qid IN (
+                                              SELECT qnid FROM questions WHERE qid = (
                                                 SELECT qid FROM quizzes WHERE uqid=:uqid
                                               )
                                             );");
@@ -140,7 +155,7 @@
 
     foreach ($question_descriptions as $question_number => $description) {
       $current_question_id = createQuestion($current_quiz_id, $question_number, $description, $question_types[$question_number]);
-      printf($current_question_id);
+      // printf($current_question_id);
 
       foreach ($question_options[$question_number] as $option_number => $option_attributes) {
         if ($question_types[$question_number] == "D") {
