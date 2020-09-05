@@ -79,4 +79,4 @@
       require_once "quiz.export.php";
   }
 ?>
-<link rel="stylesheet" href="quiz_edit.css">
+<link rel="stylesheet" href="quiz_style.css">

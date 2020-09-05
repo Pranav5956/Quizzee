@@ -1,0 +1,49 @@
+nav{
+  color: black;
+}
+.heading{
+  font-weight: bold;
+  margin-top:2rem;
+}
+body{
+  background: #e3f1fa;
+}
+
+.quizTitle{
+  border-radius: 8px;
+  font-weight: bold;
+  margin-left: 2rem;
+}
+
+.card{
+  margin: 2rem;
+  border-radius: 8px;
+  font-family: sans-serif;
+  width: 14rem;
+  background-color:#bae5ff;
+  height: 14rem;
+  box-shadow: 10px 10px 10px #888888;
+}
+
+.card-header{
+  border: none;
+  background:#0589e6;
+  border-bottom: 2px solid black;
+
+}
+.card-header a{
+  color: black;
+}
+.card-link{
+  color: black;
+  font-weight: 400;
+}
+.card-link.btn.btn-outline-success{
+  margin: 1rem 0 0 0;
+}
+.card-link.btn.btn-outline-warning{
+  margin: 2rem 0 1rem 0;
+}
+.card-link.btn.btn-outline-danger{
+  margin: 2rem 1rem 1rem 0;
+}

@@ -8,7 +8,7 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
 
-<link rel="stylesheet" href="quiz_edit.css">
+
 
 <script
 src="https://code.jquery.com/jquery-3.5.1.js"
@@ -18,7 +18,7 @@ crossorigin="anonymous"></script>
 
 <!-- Quiz Editable -->
 <div class="row m-5">
-  <div class="col-6">
+  <div class="col-6 quiz-edit">
     <div id="form-info" class="form-name-container">
       <input type="text" form="form-editable" id="quiz-name" name="quiz-name" placeholder="Enter the Quiz Name" form="form-editable" required>
       <div class="quiz-type-container">
@@ -47,9 +47,9 @@ crossorigin="anonymous"></script>
       </div>
     </form>
   </div>
-
+<div class="col-1"></div>
 <!-- Quiz Preview -->
-  <div class="col-6">
+  <div class="col-5 quiz-preview">
     <div class="sidenav">
     <form id="form-preview" class="quiz-form">
       <p id="form-preview-prompt" class="form-quiz-prompt">Add questions to see preview</p>

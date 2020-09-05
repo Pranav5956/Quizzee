@@ -140,34 +140,37 @@
     }
   }
 ?>
-
+<link rel="stylesheet" href="response_authenticate.css">
 <?php if (empty($_GET['attemptno']) && empty($_GET['uname'])): ?>
   <?php if (!count($responses)): ?>
-    <p>There are no responses to this quiz yet.</p>
-    <p>Responses will be displayed here once they start coming in.</p>
+    <div class="no-response"<p>There are no responses to this quiz yet. Responses will be displayed here once they start coming in.</p></div>
   <?php endif; ?>
 
   <?php foreach ($responses as $index => $response): ?>
-    <div class="attempt-container">
-      <p><?php echo $response['fname']." ".$response['lname']." (".$response['email'].")" ?></p>
-      <p><?php echo "Attempt: ".$response['attempt_no'] ?></p>
-      <p><?php echo "Attempted on: ".date(DATE_COOKIE, $response['attempt_time']) ?></p>
-      <a href=<?php echo "../my/quizzes/responses/".$_GET['uqid']."/".$response['attempt_no']."/u".$response['uid'] ?>>
-        View attempt
-      </a>
-      <hr>
+    <div class="card float-left">
+        <p class="card-header"><?php echo $response['fname']." ".$response['lname'] ?></p>
+          <div class="card-body">
+        <p><?php echo $response['email'] ?></p>
+        <p><?php echo "Attempt: ".$response['attempt_no'] ?></p>
+        Attempted on:
+        <p><?php echo date(DATE_COOKIE, $response['attempt_time']) ?></p>
+        <a href=<?php echo "../my/quizzes/responses/".$_GET['uqid']."/".$response['attempt_no']."/u".$response['uid'] ?>>
+          View attempt
+        </a>
+        <hr>
+      </div>
     </div>
   <?php endforeach; ?>
 <?php else: ?>
+  <link rel="stylesheet" href="quiz_style.css">
   <form class="form-acknowledge" action=<?php echo $_SERVER['REQUEST_URI'] ?> method="post">
     <div class="row">
       <div class="col-3"></div>
-        <div class="col-6">
-
+        <div class="col-6 main">
           <div class="quiz-info-container">
             <?php if (!empty($_GET['uqid'])): ?>
-              <h1><?php echo $quiz['qname'] ?></h1>
-              <h5><?php echo "Marks: ".$marks."/".$total_mark ?></h5>
+              <h1 class="quiz-header"><?php echo $quiz['qname'] ?></h1>
+              <h5 class="quiz-header"><?php echo "Marks: ".$marks."/".$total_mark ?></h5>
               <?php if (isset($quiz['code']) && empty($_GET['attemptno'])): ?>
                 <div class="quiz-code-container">
                   <label for="quiz-code-display">Quiz Code: </label>
@@ -229,19 +232,18 @@
                         ?>
                       </p>
                       <label>Choose mark for the above answer: </label>
-                      <input type="number" name=<?php echo 'o'.$o_attr['oid'] ?> value="0" min="0" max=<?php echo $o_attr['weightage'] ?>>
+                      <input class="mark" type="number" name=<?php echo 'o'.$o_attr['oid'] ?> value="0" min="0" max=<?php echo $o_attr['weightage'] ?>>
                     <?php endif ?>
                   </div>
                 <?php endforeach; ?>
                 <label>Send a feedback: </label>
-                <input type="text" name=<?php echo 'q'.$q_attr['qnid'] ?> placeholder="Enter feedback here">
+                <input clas="feedback" type="text" name=<?php echo 'q'.$q_attr['qnid'] ?> placeholder="Enter feedback here">
               </div>
             <?php endforeach; ?>
           </div>
-
+          <input type="submit" name="acknowledge" value="Acknowledge">
         </div>
       <div class="col-3"></div>
     </div>
-    <input type="submit" name="acknowledge" value="Acknowledge">
   </form>
 <?php endif; ?>

@@ -1,27 +1,42 @@
-.sidenav{
-  height: 100%; /* Full-height: remove this if you want "auto" height */
-  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  z-index: 1; /* Stay on top */
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding: 4rem;
+
+.quiz-edit{
+  background-color:#d9f0ff;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 2px solid #bec8cf;
 }
 
 #form-editable-prompt{
   margin: 2rem 0;
 }
 
-body,input[type=text],select{
-background: #121212;
-color: white;
-border:none;
+#quiz-name{
+  border: 2px solid black;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+.quiz-header{
+  color: white;
+}
+
+.quiz-type-container{
+  margin-top:1rem;
+}
+body{
+  background: #e3f1fa;
+}
+
+input[type=text],select{
+background: white
+border:3px solid black;
 }
 
 
 .editable-question-container{
-  background: #1F1B24;
+  background:#bae5ff;
   padding: 2rem;
-  border: 2px solid;
-  border-radius: 5px;
+  border: 2px solid #bec8cf;
+  border-radius: 8px;
   margin: 2rem 0;
 }
 
@@ -29,65 +44,69 @@ border:none;
   border: 2px solid;
   border-radius: 8px;
   margin: 1rem 0 1rem 0;
-  background: #121212;
-  color: white
+  background-color: #d9f0ff;
 }
 .editable-question-type-select{
   margin-left: 1rem;
   border: 1px solid grey;
   border-radius: 4px;
   padding: 0.25rem;
+  background-color: #d9f0ff;
 }
 
 .editable-question-option-input{
-  background: #121212;
-  color: white;
   border: 2px solid grey;
   border-radius: 4px;
   padding: 0.25rem;
   margin: 0.5rem 0;
+  background-color: #d9f0ff;
+}
+.editable-question-option-mark-input{
+  margin-left: 0.5rem;
+  border: 2px solid grey;
+  border-radius: 4px;
+  background-color: #d9f0ff;
 }
 
 textarea{
-  background: #121212;
-  margin-top: 1rem;
-  color: white;
+  margin: 1rem 0;
   border-radius: 8px;
   border: 2px solid grey;
+  background: #d9f0ff;
 }
 
 .editable-question-option-buttons-add,
 .editable-question-option-buttons-remove,
 .editable-question-option-buttons-up,
 .editable-question-option-buttons-down{
-  background-color: #BB86FC;
+  background-color: #bae5ff;
   margin: 0.5rem 1rem 0.5rem 0;
   border-radius: 8px;
-  border: none;
-  font-weight: bold;
+  border: 2px solid black;
 }
 .editable-question-button-clear{
   margin: 0.5rem 0 0 0;;
   border-radius: 8px;
   border: none;
-  background-color: #CF6679;
-  font-weight: 600;
+  color: white;
+  background-color: #dc3545;
 }
 .editable-question-option-isanswer-label{
     margin-left: 0.5rem;
 }
 
 #add-question,#remove-question{
-  background-color: #3700B3;
+  background-color:#007bff;
   color: white;
   padding: 0.5em;
   margin-right: 0.5em;
   border-radius: 8px;
   margin-bottom: 1rem;
   border:none;
+  color: black;
 }
 input[type=submit]{
-  background-color: #03DAC6;
+  background-color: #28a745;
   color: black;
   padding: 0.5em 2em;
   border:none;
@@ -96,7 +115,7 @@ input[type=submit]{
 }
 
 .leave-button{
-  background-color: #CF6679;
+
   color: black;
   padding: 0.5em 2em;
   border:none;
@@ -105,14 +124,25 @@ input[type=submit]{
 }
 
 /*form preview styling starts*/
+
+.main{
+  background: #121212;
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 4rem;
+}
+.quiz-preview{
+  background: #121212;
+  border: 2px solid white;
+  border-radius: 8px;
+}
+
 .preview-question-container{
   margin: 2rem;
   padding: 2rem;
-}
-.preview-question-container:hover{
   border: 2px solid white;
   border-radius: 4px;
-    transition: border 200ms linear;
+  color: white;
 }
 
 .preview-question-description{
@@ -135,16 +165,15 @@ input[type=submit]{
 .preview-question-option-label:hover{
   background: #fff;
   color: black;
-  border-radius: 8px
 }
 input[type="radio"].preview-question-option-display {
   /* display: none; */
   transition: background 100ms ease,font-weight 100ms ease, color 100ms ease;
 }
 input[type="radio"].preview-question-option-display:checked + label{
-  background:#03DAC6;
+  background:#0589e6;
   color:black;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 input[type="checkbox"].preview-question-option-display {
@@ -153,17 +182,21 @@ input[type="checkbox"].preview-question-option-display {
 }
 
 input[type="checkbox"].preview-question-option-display:checked + label{
-  background:#03DAC6;
+  background:#0589e6;
   color:black;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 label.attended-correct{
-  background:#00CC99;
+  background:#0589e6;
+  font-weight: 600;
+  color: black;
 }
 
 label.attended-incorrect, label.unattended-correct{
-  background:#CF6679;
+  background:#DC3545;
+  font-weight: 600;
+  color: black;
 }
 
 input.invisible {

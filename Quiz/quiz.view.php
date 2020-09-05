@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="quiz_edit.css">
+<link rel="stylesheet" href="quiz_style.css">
 <?php
 
   if (isset($_GET['uqid'])) {
@@ -131,14 +131,15 @@
   }
 ?>
 
+
 <?php if (empty($_GET['attemptno'])): ?>
 
   <div class="row">
     <div class="col-3"></div>
-    <div class=col-6>
+    <div class="col-6 main">
       <?php if (isset($_GET['uqid'])): ?>
-        <h1><?php echo $quiz['qname'] ?></h1>
-        <h5><?php echo "Total Score: ".$total_mark; ?></h5>
+        <h1 class="quiz-header"><?php echo $quiz['qname'] ?></h1>
+        <h5 class="quiz-header"><?php echo "Total Score: ".$total_mark; ?></h5>
         <?php if (isset($quiz['code']) && empty($_GET['attemptno'])): ?>
           <div class="quiz-code-container">
             <label for="quiz-code-display">Quiz Code: </label>
@@ -205,12 +206,12 @@
 <?php else: ?>
   <div class="row">
     <div class="col-3"></div>
-      <div class="col-6">
+      <div class="col-6 main">
 
         <div class="quiz-info-container">
           <?php if (!empty($_GET['uqid'])): ?>
-            <h1><?php echo $quiz['qname'] ?></h1>
-            <h5><?php echo "Marks: ".$marks."/".$total_mark ?></h5>
+            <h1 class="quiz-header"><?php echo $quiz['qname'] ?></h1>
+            <h5 class="quiz-header"><?php echo "Marks: ".$marks."/".$total_mark ?></h5>
             <?php if (isset($quiz['code']) && empty($_GET['attemptno'])): ?>
               <div class="quiz-code-container">
                 <label for="quiz-code-display">Quiz Code: </label>

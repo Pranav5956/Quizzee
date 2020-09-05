@@ -1,0 +1,54 @@
+.card{
+  margin: 2rem;
+  border-radius: 8px;
+  font-family: sans-serif;
+  width: 20rem;
+  background-color: #bae5ff;
+  height: 18rem;
+  box-shadow: 10px 10px 10px #888888;
+}
+
+.card-header{
+  border: none;
+  background: #0589e6;
+  border-bottom: 2px solid black;
+}
+
+.no-response{
+  text-align: center;
+  font-weight: bold;
+  font-size: 30px;
+  margin-top: 20%;
+}
+
+.auth{
+  background-image: url("https://images.unsplash.com/photo-1564207550505-5135c0fe4e76?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background:
+}
+.attempt-header{
+  color: white;
+  padding: 2rem 0 0 2rem;
+}
+
+.quiz-details,.attempts-container{
+  color: white;
+  padding: 2rem;
+}
+
+.attempts-container a{
+  color: white;
+}
+
+#code-input{
+  border: 2px solid black;
+  border-radius: 4px;
+}
+
+.mark,.feedback{
+  margin-left: 0.5rem;
+  border: 2px solid grey;
+  border-radius: 4px;
+  background-color: #d9f0ff;
+}
