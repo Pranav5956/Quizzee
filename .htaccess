@@ -5,6 +5,7 @@ RewriteEngine on
 RewriteRule ^quizzee$ index.php
 RewriteRule ^my/dashboard$ index.php [L]
 RewriteRule ^my/profile$ profile.php [L]
+RewriteRule ^my/groups/(\w*)\/?(.*)? Groups/groups.php?action=$1&gid=$2 [L]
 RewriteRule ^my/quizzes/(\w*)\/?([\d\w]*)?\/?(\d*)?\/?(.*)? Quiz/quiz.php?action=$1&uqid=$2&attemptno=$3&uname=$4 [L]
 RewriteRule ^login$ login.php
 RewriteRule ^signup$ signup.php

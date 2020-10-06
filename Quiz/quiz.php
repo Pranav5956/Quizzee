@@ -15,6 +15,10 @@
     }
   }
 
+  if ($_GET['action'] == "export") {
+    require_once "quiz.export.php";
+  }
+
   if ($_GET['action'] == "edit") {
     if ($user_id != $_SESSION['USERID']) {
       header("Location: ../../dashboard");

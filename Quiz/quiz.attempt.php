@@ -105,7 +105,6 @@
 
 <script type="text/javascript">
   $(".editable-question-button-clear").click( function() {
-    console.log($(this).parent().children().children("input:checked"));
     $(this).parent().children().children("input:checked").prop("checked", false);
   });
 

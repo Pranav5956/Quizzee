@@ -26,7 +26,7 @@
       }
     }
     // print_r($_POST);
-    header("Location: ".$_SERVER['REQUEST_URI']);
+    header("Location: /Quizzee/my/quizzes/responses/".$_GET['uqid']);
   }
 
   if (empty($_GET['uqid'])) {

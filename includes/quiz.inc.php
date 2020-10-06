@@ -109,14 +109,14 @@
       $insertQuizQuery = $conn->prepare("INSERT INTO quizzes(uqid, qname, type, code, create_time, uid)
                                          VALUES(:uqid, :qname, :type, :code, :create_time, :uid)");
 
-       $insertQuizQuery->execute(array(
-         ":uqid" => 'Q'.md5(time()),
-         ":qname" => $quiz_name,
-         ":type" => $quiz_type,
-         ":code" => $quiz_code,
-         ":create_time" => time(),
-         ":uid" => $_SESSION['USERID']
-       ));
+      $insertQuizQuery->execute(array(
+        ":uqid" => 'Q'.md5(time()),
+        ":qname" => $quiz_name,
+        ":type" => $quiz_type,
+        ":code" => $quiz_code,
+        ":create_time" => time(),
+        ":uid" => $_SESSION['USERID']
+      ));
       return $conn->lastInsertId();
     }
 
