@@ -1,12 +1,13 @@
-nav{
-  color: black;
-}
+
 .heading{
   font-weight: bold;
   margin-top:2rem;
 }
+
 body{
-  background: #e3f1fa;
+  /* background: url("") no-repeat center fixed; */
+  /* background-size: cover; */
+  background-color:rgba(9,30,66,.13);
 }
 
 .quizTitle{

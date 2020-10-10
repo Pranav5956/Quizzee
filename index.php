@@ -77,10 +77,12 @@ img{
 	margin:10px;
 }
 </style>
+
 <?php if (isset($_SESSION['USERID'])): ?>
 	<link rel="stylesheet" href="../modal/modal.css">
 	<script type="text/javascript" src="../modal/modal.js"></script>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="z-index:1;">
+
+<nav class="navbar navbar-expand-lg" style="z-index:1; background: #026aa7;">
 	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Quizzee</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -125,12 +127,103 @@ img{
 
 	<?php endif; ?>
 
+<script type="text/javascript">
+function openCity(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+
+	<style media="screen">
+	* {box-sizing: border-box}
+
+/* Style the tab */
+.tab {
+float: left;
+width: 30%;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+display: block;
+background-color: inherit;
+color: black;
+padding: 22px 16px;
+width: 100%;
+border: none;
+outline: none;
+text-align: left;
+cursor: pointer;
+transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+float: left;
+padding: 0px 12px;
+width: 70%;
+border-left: none;
+}
+
+</style>
+
+
+
 <?php if (isset($_SESSION['USERID'])): ?>
-		<link rel="stylesheet" href="../dashboard_style.css">
-		<div class="row heading"><div class="col-3"></div><div class="col-6">Created Quizzes</div></div>
+		
+		<div class="tab">
+	  <button class="tablinks" onclick="openCity(event, 'availableQuizzes')">Available Quizzes</button>
+	  <button class="tablinks" onclick="openCity(event, 'createdQuizzes')">Created Quizzes</button>
+	  <button class="tablinks" onclick="openCity(event, 'groups')">Groups</button>
+	</div>
+
+	<div id="availableQuizzes" class="tabcontent" style="display:none">
+
+		<div class="row heading"><div class="col-2"></div><div class="col-6">Available Quizzes</div></div>
 		<div class="row">
-			<div class="col-3"></div>
-			<div class="col-9">
+			<div class="col-2"></div>
+			<div class="col-10">
+				<?php if (isset($available_quizzes) && count($available_quizzes)): ?>
+					<?php foreach ($available_quizzes as $quiz_index => $quiz_attributes): ?>
+						<div class="card float-left card-block d-flex quizTitle">
+						<!-- <a class="card-body align-items-center d-flex justify-content-center" href=<?php
+						// echo 'quizzes/authenticate/'.urlencode($quiz_attributes['uqid']) ?>><?php
+						// echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?></a> -->
+						<a id="attempt-quiz-modal-trigger" class="card-body align-items-center d-flex justify-content-center modal-trigger"
+						data-modal="attempt-quiz" data-uqid=<?php echo $quiz_attributes['uqid'] ?>>
+							<?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?>
+						</a>
+						</div>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+
+	<div id="createdQuizzes" class="tabcontent" style="display:none">
+		<div class="row heading"><div class="col-2"></div><div class="col-6">Created Quizzes</div></div>
+		<div class="row">
+			<div class="col-2"></div>
+			<div class="col-10">
 				<?php if (isset($created_quizzes) && count($created_quizzes)): ?>
 					<?php foreach ($created_quizzes as $quiz_index => $quiz_attributes): ?>
 						<div class="card float-left created-quiz">
@@ -149,30 +242,13 @@ img{
 				</div>
 			</div>
 		</div>
-		<div class="row heading"><div class="col-3"></div><div class="col-6">Available Quizzes</div></div>
-		<div class="row">
-			<div class="col-3"></div>
-			<div class="col-9">
-				<?php if (isset($available_quizzes) && count($available_quizzes)): ?>
-					<?php foreach ($available_quizzes as $quiz_index => $quiz_attributes): ?>
-						<div class="card float-left card-block d-flex quizTitle">
-						<!-- <a class="card-body align-items-center d-flex justify-content-center" href=<?php
-						// echo 'quizzes/authenticate/'.urlencode($quiz_attributes['uqid']) ?>><?php
-						// echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?></a> -->
-						<a id="attempt-quiz-modal-trigger" class="card-body align-items-center d-flex justify-content-center modal-trigger"
-						data-modal="attempt-quiz" data-uqid=<?php echo $quiz_attributes['uqid'] ?>>
-							<?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?>
-						</a>
-						</div>
-					<?php endforeach; ?>
-				<?php endif; ?>
-			</div>
-		</div>
+	</div>
 
-		<div class="row heading"><div class="col-3"></div><div class="col-6">Groups</div></div>
+	<div id="groups" class="tabcontent" style="display:none">
+		<div class="row heading"><div class="col-2"></div><div class="col-6">Groups</div></div>
 		<div class="row">
-			<div class="col-3"></div>
-			<div class="col-9">
+			<div class="col-2"></div>
+			<div class="col-10">
 				<?php if (!empty($groups)): ?>
 					<?php foreach ($groups as $index => $attr): ?>
 						<div class="group-details">
@@ -188,7 +264,7 @@ img{
 				<button type="button" id="create-group-modal-trigger" class="btn btn-primary modal-trigger" data-modal="create-group">Create Group</button>
 			</div>
 		</div>
-
+	</div>
 		<div class="modal">
 		  <!-- Modal content -->
 		  <div class="modal-content">
