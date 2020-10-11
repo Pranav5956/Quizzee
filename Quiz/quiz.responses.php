@@ -165,8 +165,7 @@
   <link rel="stylesheet" href="quiz_style.css">
   <form class="form-acknowledge" action=<?php echo $_SERVER['REQUEST_URI'] ?> method="post">
     <div class="row">
-      <div class="col-3"></div>
-        <div class="col-6 main">
+        <div class="col-12 main">
           <div class="quiz-info-container">
             <?php if (!empty($_GET['uqid'])): ?>
               <h1 class="quiz-header"><?php echo $quiz['qname'] ?></h1>
@@ -237,13 +236,12 @@
                   </div>
                 <?php endforeach; ?>
                 <label>Send a feedback: </label>
-                <input clas="feedback" type="text" name=<?php echo 'q'.$q_attr['qnid'] ?> placeholder="Enter feedback here">
+                <input class="feedback" type="text" name=<?php echo 'q'.$q_attr['qnid'] ?> placeholder="Enter feedback here">
               </div>
             <?php endforeach; ?>
           </div>
           <input type="submit" name="acknowledge" value="Acknowledge">
         </div>
-      <div class="col-3"></div>
     </div>
   </form>
 <?php endif; ?>

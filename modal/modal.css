@@ -39,21 +39,43 @@ span.modal-close:hover,
 span.modal-close:focus {
   color: #000;
   text-decoration: none;
-  cursor: pointer;
+
 }
 
 .modal-header {
   padding: 0px 16px 8px 16px;
-  background-color: #007BFF;
+  background-image: linear-gradient(to right,#001f27,#0096bb);
   color: white;
   border-radius: 20px 20px 0px 0px;
 }
 
-.modal-body {padding: 16px 16px;}
+.modal-body {
+  padding: 16px 16px;
+  background-color:#004d60;
+  color: white;
+}
+#code-input{
+  width:20%;
+  padding: 0 0 0 0.5rem;
+  margin-top: 2rem;
+}
+h5.modal-extra{
+  padding-top: 1rem;
+}
+input.modal-extra.btn.btn-primary{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
 
 .modal-footer {
   padding: 2px 16px 0px 16px;
-  background-color: #007BFF;
+  background-image: linear-gradient(to right,#001f27,#0096bb);
   color: white;
   border-radius: 0px 0px 20px 20px;
+  text-align: left;
+}
+
+p#modal-footer.modal-extra{
+  position:relative;
+  left:-10rem;
 }

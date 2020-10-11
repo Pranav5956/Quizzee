@@ -82,7 +82,7 @@ img{
 	<link rel="stylesheet" href="../modal/modal.css">
 	<script type="text/javascript" src="../modal/modal.js"></script>
 
-<nav class="navbar navbar-expand-lg" style="z-index:1; background: #026aa7;">
+<nav class="navbar navbar-expand-lg">
 	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Quizzee</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -90,9 +90,9 @@ img{
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav ml-auto">
 			<div class="dropdown">
-			  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Signed In as <?php echo htmlentities($_SESSION['NAME'], ENT_QUOTES, 'utf-8'); ?>
+			  <button class="signedIn dropdown-toggle" type="button" data-toggle="dropdown">Signed In as <?php echo htmlentities($_SESSION['NAME'], ENT_QUOTES, 'utf-8'); ?>
 			  <span class="caret"></span></button>
-			  <ul class="dropdown-menu bg-primary">
+			  <ul class="dropdown-menu" style="background:#01596f;">
 					<?php if (isset($_SESSION['PROFILE-PICTURE'])): ?>
 						<img src=<?php echo $_SESSION['PROFILE-PICTURE'] ?> alt="Profile Image" class="rounded-circle img-fluid" style="width: 110px; height: 110px;">
 					<?php else: ?>
@@ -104,7 +104,7 @@ img{
 											      title="Click to update Profile Picture" class="btn btn-primary" formaction="profile">Change Profile Picture</button></li>
 							<?php endif; ?>
 							<li><input type="submit" name="logout-submit" value="Logout"
-										     title="Click to Logout" class="btn btn-primary" formaction="../includes/logout.inc.php" formmethod="post"></li>
+										     title="Click to Logout" class="signedIn" formaction="../includes/logout.inc.php" formmethod="post"></li>
 						</form>
 				  </ul>
 				</div>
@@ -143,53 +143,12 @@ function openCity(evt, tabName) {
 }
 </script>
 
-	<style media="screen">
-	* {box-sizing: border-box}
 
-/* Style the tab */
-.tab {
-float: left;
-width: 30%;
-}
-
-/* Style the buttons that are used to open the tab content */
-.tab button {
-display: block;
-background-color: inherit;
-color: black;
-padding: 22px 16px;
-width: 100%;
-border: none;
-outline: none;
-text-align: left;
-cursor: pointer;
-transition: 0.3s;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-background-color: #ddd;
-}
-
-/* Create an active/current "tab button" class */
-.tab button.active {
-background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent {
-float: left;
-padding: 0px 12px;
-width: 70%;
-border-left: none;
-}
-
-</style>
 
 
 
 <?php if (isset($_SESSION['USERID'])): ?>
-		
+	<link rel="stylesheet" href="../dashboard_style.css">
 		<div class="tab">
 	  <button class="tablinks" onclick="openCity(event, 'availableQuizzes')">Available Quizzes</button>
 	  <button class="tablinks" onclick="openCity(event, 'createdQuizzes')">Created Quizzes</button>
@@ -198,10 +157,9 @@ border-left: none;
 
 	<div id="availableQuizzes" class="tabcontent" style="display:none">
 
-		<div class="row heading"><div class="col-2"></div><div class="col-6">Available Quizzes</div></div>
 		<div class="row">
-			<div class="col-2"></div>
-			<div class="col-10">
+			<div class="col-3"></div>
+			<div class="col-9">
 				<?php if (isset($available_quizzes) && count($available_quizzes)): ?>
 					<?php foreach ($available_quizzes as $quiz_index => $quiz_attributes): ?>
 						<div class="card float-left card-block d-flex quizTitle">
@@ -220,19 +178,21 @@ border-left: none;
 	</div>
 
 	<div id="createdQuizzes" class="tabcontent" style="display:none">
-		<div class="row heading"><div class="col-2"></div><div class="col-6">Created Quizzes</div></div>
 		<div class="row">
-			<div class="col-2"></div>
-			<div class="col-10">
+			<div class="col-3"></div>
+			<div class="col-9">
 				<?php if (isset($created_quizzes) && count($created_quizzes)): ?>
 					<?php foreach ($created_quizzes as $quiz_index => $quiz_attributes): ?>
 						<div class="card float-left created-quiz">
 							<div class="card-header"><a href=<?php echo 'quizzes/view/'.urlencode($quiz_attributes['uqid']) ?>> <?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?> </a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
 							<div class="card-body">
-								<a class="card-link btn btn-outline-success" href=<?php echo 'quizzes/responses/'.urlencode($quiz_attributes['uqid']) ?>> View Responses </a>&nbsp;&nbsp;&nbsp;&nbsp;
-								<a class="card-link btn btn-outline-warning" href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
-								<a data-modal="delete-quiz" data-uqid=<?php echo $quiz_attributes['uqid'] ?> class="btn btn-outline-danger modal-trigger">Delete</a>
-								<a class="card-link btn btn-outline-primary" href=<?php echo 'quizzes/export/'.urlencode($quiz_attributes['uqid']) ?>> PDF View/Export </a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+							<a class="card-link btn btn-outline-success" href=<?php echo 'quizzes/responses/'.urlencode($quiz_attributes['uqid']) ?>> View Responses </a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a class="card-link btn btn-outline-warning" href=<?php echo 'quizzes/edit/'.urlencode($quiz_attributes['uqid']) ?>> Edit </a>&nbsp;&nbsp;&nbsp;&nbsp;
+								<a class="card-link btn btn-outline-info" href=<?php echo 'quizzes/export/'.urlencode($quiz_attributes['uqid']) ?>> PDF View/Export </a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a data-modal="delete-quiz" data-uqid=<?php echo $quiz_attributes['uqid'] ?> class="btn btn-outline-danger modal-trigger">Delete</a>
+
+
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -245,10 +205,9 @@ border-left: none;
 	</div>
 
 	<div id="groups" class="tabcontent" style="display:none">
-		<div class="row heading"><div class="col-2"></div><div class="col-6">Groups</div></div>
 		<div class="row">
-			<div class="col-2"></div>
-			<div class="col-10">
+			<div class="col-3"></div>
+			<div class="col-9">
 				<?php if (!empty($groups)): ?>
 					<?php foreach ($groups as $index => $attr): ?>
 						<div class="group-details">

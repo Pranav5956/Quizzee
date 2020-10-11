@@ -57,8 +57,7 @@
 ?>
 <link rel="stylesheet" href="quiz_style.css">
 <div class="row">
-<div class="col-3"></div>
-<div class="col-6 main">
+<div class="col-12 main">
   <?php if (isset($_POST['attempt'])): ?>
     <div class="quiz-attempt">
       <h1 class="quiz-header"><?php echo $quiz_params['qname'] ?></h1>
@@ -99,7 +98,6 @@
     </div>
   <?php endif; ?>
 </div>
-<div class="col-3"></div>
 </div>
 
 

@@ -1,24 +1,31 @@
-.card{
-  margin: 2rem;
-  border-radius: 8px;
-  font-family: sans-serif;
-  width: 20rem;
-  background-color: #bae5ff;
-  height: 18rem;
-  box-shadow: 10px 10px 10px #888888;
-}
-
-.card-header{
-  border: none;
-  background: #0589e6;
-  border-bottom: 2px solid black;
-}
-
 .no-response{
+  color:white;
+  position:absolute;
+  top:-10rem;
+  margin-left:2rem;
+  width:50%;
   text-align: center;
   font-weight: bold;
   font-size: 30px;
   margin-top: 20%;
+}
+
+.card{
+  margin: 2rem;
+  border-radius: 8px;
+  font-family: sans-serif;
+  width: 19rem;
+  color:white;
+  background-image: linear-gradient(#00479d,#001640);
+  height: 16rem;
+  box-shadow: 10px 10px 10px #000000;
+}
+
+.card-header{
+  border: none;
+  height: 2rem;
+  background: transparent;
+  text-align:center;
 }
 
 .auth{
@@ -27,6 +34,7 @@
   background-size: cover;
   background:
 }
+
 .attempt-header{
   color: white;
   padding: 2rem 0 0 2rem;

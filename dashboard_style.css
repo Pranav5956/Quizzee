@@ -1,13 +1,78 @@
+.signedIn{
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  color: #fff;
+  background-color: #01596f;
+  border-color: #01596f;
+}
+.tab {
+float: left;
+width: 30%;
+
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+display: block;
+background-color: inherit;
+color: black;
+padding: 22px 16px;
+width: 75%;
+border: none;
+outline: none;
+text-align: left;
+cursor: pointer;
+transition: 0.3s;
+}
+
+button.tablinks{
+  color:white;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+background-color: rgba(204,204,204,0.5);
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+background-color:#44a6b3;
+color:black;
+}
+
+/* Style the tab content */
+.tabcontent {
+float: left;
+padding: 0px 12px;
+width: 70%;
+border-left: none;
+}
 
 .heading{
   font-weight: bold;
   margin-top:2rem;
 }
 
-body{
-  /* background: url("") no-repeat center fixed; */
-  /* background-size: cover; */
-  background-color:rgba(9,30,66,.13);
+nav{
+  z-index:1;
+  background-image: linear-gradient(to right,#001f27,#0096bb);
+  border-bottom:none;
+}
+
+html {
+ min-height: 100%;
+ background: url("https://images.unsplash.com/photo-1598705352140-be8e33a97d55?ixlib=rb-1.2.1&auto=format&fit=crop&w=1874&q=80");
+ background-size: cover;
+ background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .quizTitle{
@@ -20,31 +85,58 @@ body{
   margin: 2rem;
   border-radius: 8px;
   font-family: sans-serif;
-  width: 14rem;
-  background-color:#bae5ff;
-  height: 14rem;
-  box-shadow: 10px 10px 10px #888888;
+  width: 19rem;
+  background-image: linear-gradient(#014e60, #00a2ca);
+  /* background-color:#205c33; */
+  /* color:#fff; */
+  height: 10.5rem;
+  box-shadow: 10px 10px 10px #000000;
 }
 
 .card-header{
   border: none;
-  background:#0589e6;
-  border-bottom: 2px solid black;
-
+  height: 2rem;
+  background: transparent;
+  text-align:center;
 }
 .card-header a{
   color: black;
 }
+
+.card-body{
+  padding-top : 0;
+  padding-bottom : 0;
+}
+
 .card-link{
   color: black;
   font-weight: 400;
 }
+
 .card-link.btn.btn-outline-success{
-  margin: 1rem 0 0 0;
+  margin: 0;
+  border:none;
 }
 .card-link.btn.btn-outline-warning{
-  margin: 2rem 0 1rem 0;
+  margin: 1rem 0 1rem 0;
+  border:none;
 }
-.card-link.btn.btn-outline-danger{
-  margin: 2rem 1rem 1rem 0;
+a.btn.btn-outline-danger.modal-trigger{
+  margin: 1rem 0 1rem 0;
+  border:none;
+  position:relative;
+  left: -1rem;
+}
+.card-link.btn.btn-outline-info{
+  margin: 1rem 1rem 1rem 0;
+  border:none;
+}
+
+.card-link.btn.btn-outline-info:hover,
+.card-link.btn.btn-outline-success:hover,
+.card-link.btn.btn-outline-warning:hover,
+a.btn.btn-outline-danger.modal-trigger:hover
+{
+  color:white;
+  background-color: #01596f;
 }

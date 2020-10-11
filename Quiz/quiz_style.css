@@ -1,9 +1,10 @@
 
 .quiz-edit{
-  background-color:#d9f0ff;
+  background-color:rgb(0,26,67,0.5);
   padding: 2rem;
+  color:white;
   border-radius: 8px;
-  border: 2px solid #bec8cf;
+  border: 1px solid #bec8cf;
 }
 
 #form-editable-prompt{
@@ -11,10 +12,13 @@
 }
 
 #quiz-name{
-  border: 2px solid black;
+  border: 1px solid black;
+  background:rgb(0,55,126,0.8);
+  color:white;
   border-radius: 4px;
   padding: 0.5rem;
 }
+
 .quiz-header{
   color: white;
 }
@@ -22,8 +26,18 @@
 .quiz-type-container{
   margin-top:1rem;
 }
+.quiz-type-select{
+  background-color:rgb(0,26,67,0.5);
+  color:white;
+  border-radius:4px;
+}
 body{
-  background: #e3f1fa;
+  background-image:url("https://images.unsplash.com/photo-1597600159211-d6c104f408d1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1874&q=80");
+  background-size: cover;
+  background-repeat: no-repeat;
+   background-position: center center;
+   background-attachment: fixed;
+   min-height: 100%;
 }
 
 input[type=text],select{
@@ -31,58 +45,65 @@ background: white
 border:3px solid black;
 }
 
-
+/* rgb(0,112,231,0.5); */
 .editable-question-container{
-  background:#bae5ff;
+  background:rgb(0,55,126,0.8);
+  color:white;
   padding: 2rem;
-  border: 2px solid #bec8cf;
+  /* border: 1px solid #bec8cf; */
   border-radius: 8px;
   margin: 2rem 0;
 }
 
 .editable-question-description-input{
-  border: 2px solid;
+  border: 0.5px solid;
   border-radius: 8px;
   margin: 1rem 0 1rem 0;
-  background-color: #d9f0ff;
+  background-color: rgb(0,26,67,0.5);
+  color:white;
 }
 .editable-question-type-select{
   margin-left: 1rem;
   border: 1px solid grey;
   border-radius: 4px;
   padding: 0.25rem;
-  background-color: #d9f0ff;
+  color:white;
+  background-color: rgb(0,26,67,0.5);
 }
 
 .editable-question-option-input{
-  border: 2px solid grey;
+  border: 1px solid grey;
   border-radius: 4px;
   padding: 0.25rem;
   margin: 0.5rem 0;
-  background-color: #d9f0ff;
+  background-color: rgb(0,26,67,0.5);
+  color:white;
 }
 .editable-question-option-mark-input{
   margin-left: 0.5rem;
   border: 2px solid grey;
   border-radius: 4px;
-  background-color: #d9f0ff;
+  background-color: rgb(0,26,67,0.5);
+  color:white;
 }
 
 textarea{
   margin: 1rem 0;
   border-radius: 8px;
   border: 2px solid grey;
-  background: #d9f0ff;
+  background-color: rgb(0,26,67,0.5);
+  color:white;
 }
 
 .editable-question-option-buttons-add,
 .editable-question-option-buttons-remove,
 .editable-question-option-buttons-up,
 .editable-question-option-buttons-down{
-  background-color: #bae5ff;
+  background-color: rgb(0,26,67,0.5);
+  color:white;
   margin: 0.5rem 1rem 0.5rem 0;
   border-radius: 8px;
-  border: 2px solid black;
+  border: 1px solid black;
 }
 .editable-question-button-clear{
   margin: 0.5rem 0 0 0;;
@@ -126,13 +147,15 @@ input[type=submit]{
 /*form preview styling starts*/
 
 .main{
-  background: #121212;
-  border: 2px solid white;
-  border-radius: 8px;
-  padding: 4rem;
+  background: rgb(0,26,67,0.5);
+  padding: 4rem 4rem 0 4rem;
 }
+.form-quiz-prompt{
+  color:white;
+}
+
 .quiz-preview{
-  background: #121212;
+  background: rgb(0,26,67,0.5);
   border: 2px solid white;
   border-radius: 8px;
 }
@@ -140,8 +163,6 @@ input[type=submit]{
 .preview-question-container{
   margin: 2rem;
   padding: 2rem;
-  border: 2px solid white;
-  border-radius: 4px;
   color: white;
 }
 
@@ -201,4 +222,12 @@ label.attended-incorrect, label.unattended-correct{
 
 input.invisible {
   display: none;
+}
+
+.feedback,.mark{
+  background-color:rgb(0,26,67,0.5);
+  color:white;
+  border:1px solid white;
+  border-radius:4px;
+  margin: 1rem;
 }

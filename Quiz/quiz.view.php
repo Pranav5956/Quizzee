@@ -135,8 +135,7 @@
 <?php if (empty($_GET['attemptno'])): ?>
 
   <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6 main">
+    <div class="col-12 main">
       <?php if (isset($_GET['uqid'])): ?>
         <h1 class="quiz-header"><?php echo $quiz['qname'] ?></h1>
         <h5 class="quiz-header"><?php echo "Total Score: ".$total_mark; ?></h5>
@@ -200,14 +199,12 @@
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
-    <div class="col-3"></div>
+    <!-- <div class="col-8"></div> -->
   </div>
 
 <?php else: ?>
   <div class="row">
-    <div class="col-3"></div>
-      <div class="col-6 main">
-
+      <div class="col-12 main">
         <div class="quiz-info-container">
           <?php if (!empty($_GET['uqid'])): ?>
             <h1 class="quiz-header"><?php echo $quiz['qname'] ?></h1>
@@ -288,7 +285,7 @@
         </div>
 
       </div>
-    <div class="col-3"></div>
+      <!-- <div class="col-8"></div> -->
   </div>
 <?php endif; ?>
 
