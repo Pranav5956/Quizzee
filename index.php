@@ -100,11 +100,10 @@ img{
 					<?php endif; ?>
 						<form>
 							<?php if ($_SESSION['TYPE'] == 'LOGIN'): ?>
-								<li><button type="submit" name="action" value="change-profile-pic"
-											      title="Click to update Profile Picture" class="btn btn-primary" formaction="profile">Change Profile Picture</button></li>
+								<li><a title="Click to view your Profile" class="profileBtn btn" href="profile">My Profile</a></li>
 							<?php endif; ?>
 							<li><input type="submit" name="logout-submit" value="Logout"
-										     title="Click to Logout" class="signedIn" formaction="../includes/logout.inc.php" formmethod="post"></li>
+										     title="Click to Logout" class="signedIn btn" formaction="../includes/logout.inc.php" formmethod="post"></li>
 						</form>
 				  </ul>
 				</div>
@@ -128,19 +127,27 @@ img{
 	<?php endif; ?>
 
 <script type="text/javascript">
-function openCity(evt, tabName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
+	function openCity(evt, tabName) {
+		$(".tabcontent").css("display", "none");
+		$(".tablinks").removeClass("active");
+		$("#" + tabName).css("display", "block");
+		$(evt.currentTarget).addClass("active");
+
+		if (tabName != "groups") {
+			$("#group-panel-collapse").collapse("hide");
+			$("#group-name").text("");
+			$("#group-desc").text("");
+			$("#group-create-time").text("");
+		} else {
+			$.get("../Groups/group_info.parse.php", {"ugid": $(evt.currentTarget).data()['ugid']}, function(response) {
+	      group_info = JSON.parse(response);
+				$("#group-name").text("Group Name: " + group_info['gname']);
+				$("#group-desc").text("Group Description: " + group_info['gdesc']);
+				let date = new Date(group_info['create_time'] * 1000);
+				$("#group-create-time").text("Created on: " + date);
+			});
+		}
+	}
 </script>
 
 
@@ -152,7 +159,14 @@ function openCity(evt, tabName) {
 		<div class="tab">
 	  <button class="tablinks" onclick="openCity(event, 'availableQuizzes')">Available Quizzes</button>
 	  <button class="tablinks" onclick="openCity(event, 'createdQuizzes')">Created Quizzes</button>
-	  <button class="tablinks" onclick="openCity(event, 'groups')">Groups</button>
+	  <button class="tablinks" data-toggle="collapse" data-target="#group-panel-collapse">Groups</button>
+		<div class="collapse" id="group-panel-collapse">
+			<?php foreach ($groups as $index => $attr): ?>
+				<button type="button" data-ugid=<?php echo $attr['ugid'] ?> onclick="openCity(event, 'groups')" class="tablinks"><?php echo htmlentities($attr['gname'], ENT_QUOTES, 'utf-8'); ?></button>
+			<?php endforeach; ?>
+			<button type="button" id="create-group-modal-trigger" class="modal-trigger" data-modal="create-group"
+							onclick=>Create Group</button>
+		</div>
 	</div>
 
 	<div id="availableQuizzes" class="tabcontent" style="display:none">
@@ -208,34 +222,25 @@ function openCity(evt, tabName) {
 		<div class="row">
 			<div class="col-3"></div>
 			<div class="col-9">
-				<?php if (!empty($groups)): ?>
-					<?php foreach ($groups as $index => $attr): ?>
-						<div class="group-details">
-							<p><?php echo htmlentities("Group Name: ".$attr['gname'], ENT_QUOTES, 'utf-8'); ?></p>
-							<p><?php echo htmlentities("Group Description: ".$attr['gdesc'], ENT_QUOTES, 'utf-8'); ?></p>
-							<p><?php echo htmlentities("Status: ".(($attr['is_admin'] == 'Yes')? "Admin" : "Member"), ENT_QUOTES, 'utf-8'); ?></p>
-							<button type="button" data-modal="delete-group" data-ugid=<?php echo $attr['ugid'] ?> class="btn btn-outline-primary modal-trigger">Delete Group</button>
-						</div>
-					<?php endforeach; ?>
-				<?php else: ?>
-					<p>You are not part of any groups yet.</p>
-				<?php endif; ?>
-				<button type="button" id="create-group-modal-trigger" class="btn btn-primary modal-trigger" data-modal="create-group">Create Group</button>
+				<p id="group-name"></p>
+				<p id="group-desc"></p>
+				<p id="group-create-time"></p>
 			</div>
 		</div>
 	</div>
-		<div class="modal">
-		  <!-- Modal content -->
-		  <div class="modal-content">
-		    <div class="modal-header">
-		      <span class="modal-close">&times;</span>
-		    </div>
-		    <div class="modal-body">
-		    </div>
-		    <div class="modal-footer">
-		    </div>
-		  </div>
-		</div>
+
+	<div class="modal">
+	  <!-- Modal content -->
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <span class="modal-close">&times;</span>
+	    </div>
+	    <div class="modal-body">
+	    </div>
+	    <div class="modal-footer">
+	    </div>
+	  </div>
+	</div>
 
 <?php else: ?>
 	<link rel="stylesheet" href="landing.css">

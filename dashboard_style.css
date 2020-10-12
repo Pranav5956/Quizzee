@@ -1,4 +1,4 @@
-.signedIn{
+.signedIn, .profileBtn{
   display: inline-block;
   font-weight: 400;
   text-align: center;
@@ -33,7 +33,7 @@ cursor: pointer;
 transition: 0.3s;
 }
 
-button.tablinks{
+.tab button{
   color:white;
 }
 

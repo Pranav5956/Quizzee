@@ -1,11 +1,74 @@
+<style>
+  img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .profile-upload-btn {
+    border-radius: 50%;
+    padding-left: 2.5px;
+    padding-top: 3px;
+    border: 2px solid black;
+    position: relative;
+    left: -36px;
+    top: 50px;
+    width: 25px;
+    height: 25px;
+    transform: scale(2);
+    background-color: white;
+  }
+
+  .profile-upload-btn:hover {
+    background-color: #EEE;
+  }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.css">
+
 <?php
   require_once "includes/utilities.inc.php";
   require_once "header.php";
+
+  if (isset($_GET['action']) && isset($_SESSION['TYPE']) && $_SESSION['TYPE'] == 'LOGIN') {
+    require_once "includes/db.inc.php";
+    $user = $conn->prepare("SELECT * FROM Users WHERE uid=:uid");
+    $user->execute(array(
+      ":uid" => $_SESSION['USERID']
+    ));
+    $user = $user->fetch(PDO::FETCH_ASSOC);
+  }
 ?>
+
 <?php if (isset($_GET['action']) && isset($_SESSION['TYPE']) && $_SESSION['TYPE'] == 'LOGIN'): ?>
   <form action="../includes/profile.inc.php" method="post" enctype="multipart/form-data">
-    <input type="file" name="profile_pic" value="Upload Profile Picture" required>
-    <input type="submit" class="btn btn-primary" name="upload" value="Upload Profile Picture">
+    <div class="form-group">
+      <img id="profile-pic" src=<?php echo $user['profile_pic'] ?> alt="Profile Picture" class="rounded-circle">
+      <label class="fa fa-camera profile-upload-btn">
+        <input id="profile-pic-upload" type="file" name="profile-pic" value="Upload Profile Picture" style="display: none">
+      </label>
+      <small id="profile-pic-msg" style="color:red; display:none;">Upload images with size less than 1MB</small>
+    </div>
+    <div class="form-group">
+      <input type="text" name="fname" value=<?php echo $user['fname'] ?> class="form-control" placeholder="First Name" required>
+    </div>
+    <div class="form-group">
+      <input type="text" name="lname" value=<?php echo $user['lname'] ?> class="form-control" placeholder="Last Name" required>
+    </div>
+    <div class="form-group">
+      <input type="text" name="email" value=<?php echo $user['email'] ?> class="form-control" placeholder="Email ID" required>
+    </div>
+    <input type="submit" class="btn btn-primary" name="update-profile" value="Update Profile">
+  </form>
+
+  <form action="../includes/profile.inc.php" method="post">
+    <div class="form-group">
+      <input type="password" id="npwd" name="npwd" class="form-control" placeholder="New Password" required>
+    </div>
+    <div class="form-group">
+      <input type="password" id="cpwd" name="cpwd" class="form-control" placeholder="Confirm Password" required>
+    </div>
+    <small id="password-msg" style="color:red; display:none;">Confirmation Password is Wrong</small>
+    <input type="submit" class="btn btn-primary" name="update-password" value="Update Password">
   </form>
 <?php else: ?>
   <?php
@@ -16,6 +79,41 @@
       header("Location: ../quizzee");
       return;
     }
-
   ?>
 <?php endif; ?>
+
+<script>
+  $("#profile-pic-upload").change(function() {
+      let file = document.getElementById("profile-pic-upload").files;
+      if (file[0].size <= 1000000) {
+        let filereader = new FileReader();
+        filereader.onload = function(filedata)
+        {
+          $("#profile-pic").attr("src", filedata.target.result);
+        }
+        filereader.readAsDataURL(file[0]);
+      } else {
+        $("#profile-pic-msg").fadeIn(function() {
+          setTimeout(function() {
+            $("#profile-pic-msg").fadeOut();
+          }, 5000);
+        });
+      }
+    });
+
+  $("#cpwd").change(function() {
+    if ($(this).val() != $("#npwd").val()) {
+      $("#password-msg").css("display", "block");
+    } else {
+      $("#password-msg").css("display", "none");
+    }
+  })
+
+  $("#npwd").change(function() {
+    if ($(this).val() != $("#cpwd").val() && $("#cpwd").val() != "") {
+      $("#password-msg").css("display", "block");
+    } else {
+      $("#password-msg").css("display", "none");
+    }
+  })
+</script>
