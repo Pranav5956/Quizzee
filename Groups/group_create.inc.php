@@ -1,10 +1,10 @@
 <?php
   session_start();
-  require_once "db.inc.php";
+  require_once "../includes/db.inc.php";
 
   if (isset($_POST['create-group-submit'])) {
     if (!empty($_POST['group-name']) && !empty($_POST['group-desc'])) {
-      $ugid = 'G'.md5(time());
+      $ugid = 'G'.hash('crc32', $_POST['group-name'].$_POST['group-desc'].time());
       $gname = $_POST['group-name'];
       $gdesc = $_POST['group-desc'];
       $create_time = time();

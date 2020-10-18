@@ -42,7 +42,11 @@
 <?php if (isset($_GET['action']) && isset($_SESSION['TYPE']) && $_SESSION['TYPE'] == 'LOGIN'): ?>
   <form action="../includes/profile.inc.php" method="post" enctype="multipart/form-data">
     <div class="form-group">
-      <img id="profile-pic" src=<?php echo $user['profile_pic'] ?> alt="Profile Picture" class="rounded-circle">
+      <?php if (isset($_SESSION['PROFILE-PICTURE'])): ?>
+        <img id="profile-pic" src=<?php echo $user['profile_pic'] ?> alt="Profile Picture" class="rounded-circle">
+      <?php else: ?>
+        <img id="profile-pic" src="https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png" alt="Profile Picture" class="rounded-circle">
+      <?php endif; ?>
       <label class="fa fa-camera profile-upload-btn">
         <input id="profile-pic-upload" type="file" name="profile-pic" value="Upload Profile Picture" style="display: none">
       </label>

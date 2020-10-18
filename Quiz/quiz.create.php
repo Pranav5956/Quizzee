@@ -29,6 +29,12 @@ crossorigin="anonymous"></script>
           <option value="G">Restricted To Group</option>
         </select>
       </div>
+      <div class="quiz-group-container">
+        <label for="quiz-group-select">Add to Groups: </label>
+        <select form="form-editable" class="chosen" id="quiz-group-select" name="groups[]" multiple data-placeholder="Enter Group Name or GroupID">
+          <?php require_once 'groups_list.php'; ?>
+        </select>
+      </div>
       <div class="quiz-code-container">
         <label for="quiz-code-display">Quiz Code: </label>
         <input form="form-editable" id="quiz-code-display" type="text" name="quiz-code" value=<?php echo substr(md5($_SESSION['USERID'].time()), 0, 8); ?> min="8" max="8" readonly>
@@ -58,3 +64,10 @@ crossorigin="anonymous"></script>
   </div>
 
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+
+<script>
+  $('#quiz-group-select').chosen({width: "60%"});
+</script>

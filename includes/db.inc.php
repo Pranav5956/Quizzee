@@ -1,7 +1,7 @@
 <?php
   // Database Credentials
   $host = 'localhost';
-  $dbname = 'Quizee';
+  $dbname = 'Quizzee';
   $usn = 'root';
   $pwd = '';
 

@@ -83,10 +83,16 @@ $(document).ready(function() {
           }
 
           $('.quiz-code-container').show();
+          $('.quiz-group-container').show();
           $('#quiz-code-display').prop("disabled", false);
+          $('#quiz-group-select').prop("disabled", false);
           if ($("#quiz-type-select").children("option:selected").val() != "C") {
             $('.quiz-code-container').hide();
             $('#quiz-code-display').prop("disabled", true);
+          }
+          if ($("#quiz-type-select").children("option:selected").val() != "G") {
+            $('.quiz-group-container').hide();
+            $('#quiz-group-select').prop("disabled", true);
           }
         });
       }
@@ -120,19 +126,33 @@ $(document).ready(function() {
       // Change quiz type
       $("#quiz-type-select")
       .change(function() {
+        console.log($(this).children("option:selected").val());
         if ($(this).children("option:selected").val() == "C") {
           $('.quiz-code-container').show();
           $('#quiz-code-display').prop("disabled", false);
+          $('.quiz-group-container').hide();
+          $('#quiz-group-select').prop("disabled", true);
         }
         else {
           $('.quiz-code-container').hide();
           $('#quiz-code-display').prop("disabled", true);
+          $('.quiz-group-container').hide();
+          $('#quiz-group-select').prop("disabled", true);
+
+          if ($(this).children("option:selected").val() == "G") {
+            $('.quiz-group-container').show();
+            $('#quiz-group-select').prop("disabled", false);
+          }
         }
       })
 
       if ($("#quiz-type-select").children("option:selected").val() != "C") {
         $('.quiz-code-container').hide();
         $('#quiz-code-display').prop("disabled", true);
+      }
+      if ($(this).children("option:selected").val() != "G") {
+        $('.quiz-group-container').hide();
+        $('#quiz-group-select').prop("disabled", true);
       }
 
       $("#quiz-code-display")

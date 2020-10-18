@@ -50,7 +50,7 @@
 		// Fetch available quizzes
 		$selectQuizQuery = $conn->prepare("SELECT uqid, qname, type, create_time
 																			 FROM quizzes
-																			 WHERE uid <> :uid");
+																			 WHERE uid <> :uid AND type <> 'G'");
 		$selectQuizQuery->execute(array(
 			":uid" => $_SESSION['USERID']
 		));
@@ -83,7 +83,9 @@ img{
 	<script type="text/javascript" src="../modal/modal.js"></script>
 
 <nav class="navbar navbar-expand-lg">
-	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Quizzee</a>
+	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>
+		<img src="../Resources/Images/logo.png" alt="Quizzee Logo" style="width:28%; margin-top:-20px; margin-bottom:-20px;">
+	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -112,7 +114,9 @@ img{
 	</nav>
 	<?php else: ?>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="z-index:1;">
-			<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>Quizzee</a>
+			<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>
+				<img src="Resources/Images/logo.png" alt="Quizzee Logo" style="width:28%; margin-top:-20px; margin-bottom:-20px;">
+			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -145,28 +149,66 @@ img{
 				$("#group-desc").text("Group Description: " + group_info['gdesc']);
 				let date = new Date(group_info['create_time'] * 1000);
 				$("#group-create-time").text("Created on: " + date);
+				$("#group-members").empty();
+				$.get("../Groups/group_members.parse.php", {"ugid": group_info['ugid']}, function(res) {
+					$("#group-members").append($(res));
+				});
+				if (group_info['is_admin'] == "Yes") {
+					$("#group-delete-button").show();
+					$("#add-users-form").show();
+					$("#group-delete-button").data('ugid', group_info['ugid']);
+					$("#add-users-form").attr("action", "../Groups/add_users_to_group.php?ugid=" + group_info['ugid']);
+
+					$.get("../includes/users_parse.inc.php", {"ugid": group_info['ugid']}, function(res) {
+						$("#select-user-for-group").empty().append($(res));
+						$("#select-user-for-group").trigger("chosen:updated");
+					});
+				}
+				else {
+					$("#group-delete-button").data('ugid', "");
+					$("#add-users-form").attr("action", "");
+					$("#group-delete-button").hide();
+					$("#add-users-form").hide();
+					$("#group-members").empty();
+					$("#group-quizzes-container").empty();
+				}
+				$.get("../Groups/group_quiz_list.php", {"ugid": group_info['ugid']}, function(res) {
+					$("#group-quizzes-container").empty();
+					let quizzes = JSON.parse(res);
+					$.each(quizzes, function(index, quiz) {
+						$("<div>").addClass("card float-left card-block d-flex quizTitle").append(
+							$("<a>").addClass("card-body align-items-center d-flex justify-content-center modal-trigger gqt").text(quiz['qname'])
+							.attr("data-modal", "attempt-quiz").attr("data-uqid", quiz['uqid'])
+						).appendTo($("#group-quizzes-container"));
+					});
+					if (group_info['is_admin'] != "Yes")
+						$(".gqt").click(fadeInModal);
+				});
 			});
 		}
 	}
 </script>
 
 
-
-
-
 <?php if (isset($_SESSION['USERID'])): ?>
 	<link rel="stylesheet" href="../dashboard_style.css">
 		<div class="tab">
+		<button class="tablinks active" onclick="openCity(event, 'home')">Home</button>
 	  <button class="tablinks" onclick="openCity(event, 'availableQuizzes')">Available Quizzes</button>
 	  <button class="tablinks" onclick="openCity(event, 'createdQuizzes')">Created Quizzes</button>
-	  <button class="tablinks" data-toggle="collapse" data-target="#group-panel-collapse">Groups</button>
-		<div class="collapse" id="group-panel-collapse">
+	  <button class="tablinks" data-toggle="collapse" data-target="#group-panel-collapse">
+			Groups <span class="badge badge-light"><?php echo count($groups) ?></span></button>
+		<div class="collapse" id="group-panel-collapse" style="max-height: 380px;">
 			<?php foreach ($groups as $index => $attr): ?>
 				<button type="button" data-ugid=<?php echo $attr['ugid'] ?> onclick="openCity(event, 'groups')" class="tablinks"><?php echo htmlentities($attr['gname'], ENT_QUOTES, 'utf-8'); ?></button>
 			<?php endforeach; ?>
 			<button type="button" id="create-group-modal-trigger" class="modal-trigger" data-modal="create-group"
 							onclick=>Create Group</button>
 		</div>
+	</div>
+
+	<div id="home" class="tabcontent" style="display:none">
+
 	</div>
 
 	<div id="availableQuizzes" class="tabcontent" style="display:none">
@@ -177,9 +219,6 @@ img{
 				<?php if (isset($available_quizzes) && count($available_quizzes)): ?>
 					<?php foreach ($available_quizzes as $quiz_index => $quiz_attributes): ?>
 						<div class="card float-left card-block d-flex quizTitle">
-						<!-- <a class="card-body align-items-center d-flex justify-content-center" href=<?php
-						// echo 'quizzes/authenticate/'.urlencode($quiz_attributes['uqid']) ?>><?php
-						// echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?></a> -->
 						<a id="attempt-quiz-modal-trigger" class="card-body align-items-center d-flex justify-content-center modal-trigger"
 						data-modal="attempt-quiz" data-uqid=<?php echo $quiz_attributes['uqid'] ?>>
 							<?php echo htmlentities($quiz_attributes['qname'], ENT_QUOTES, 'utf-8'); ?>
@@ -222,9 +261,23 @@ img{
 		<div class="row">
 			<div class="col-3"></div>
 			<div class="col-9">
+				<h3>Group Information</h3>
 				<p id="group-name"></p>
 				<p id="group-desc"></p>
 				<p id="group-create-time"></p>
+				<form method="post" id="add-users-form">
+					<label for="select-user-for-group">Add Users: </label>
+					<select class="chosen" id="select-user-for-group" name="users[]" multiple data-placeholder="Enter Username or UserID"></select>
+					<input type="submit" name="add-users-to-group" value="Add Users" class="btn btn-primary">
+				</form>
+				<h4>Group Members</h4>
+				<div id="group-members"></div>
+				<div id="group-quizzes-container"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="group-buttons offset-3">
+				<button type="button" id="group-delete-button" data-modal="delete-group" data-ugid="" class="modal-trigger btn btn-danger">Delete Group</button>
 			</div>
 		</div>
 	</div>
@@ -264,7 +317,8 @@ img{
 </div>
 <?php endif; ?>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
 
 <script type="text/javascript">
 	function createQuiz() {
@@ -272,4 +326,6 @@ img{
 		window.location.assign("quizzes/create");
 		return false;
 	}
+
+	$("#select-user-for-group").chosen({ width:"80%" });
 </script>

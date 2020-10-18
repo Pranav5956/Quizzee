@@ -43,6 +43,12 @@ function set_modal(data) {
         .css("paddingTop", "24px")
         .text("This quiz is CODE-PROTECTED. Enter the Quiz code to attempt the quiz.")
         .appendTo(body_pos);
+      } else if (quiz_info['type'] == 'G') {
+        $('<h5>')
+        .attr("class", "modal-extra")
+        .css("paddingTop", "24px")
+        .text("This quiz is restricted to members of this Group. Would you like to attempt this quiz?")
+        .appendTo(body_pos);
       } else {
         $('<h5>')
         .attr("class", "modal-extra")
@@ -180,7 +186,7 @@ function set_modal(data) {
     $('<form>')
     .attr("id", "create-group-form")
     .attr("class", "modal-extra")
-    .attr("action", "../includes/group_create.inc.php")
+    .attr("action", "../Groups/group_create.inc.php")
     .attr("method", "post")
     .submit(function(event) {
 
@@ -258,7 +264,7 @@ function set_modal(data) {
 
       $('<form>')
       .attr("id", "form-group-delete")
-      .attr("action", "../includes/group_delete.inc.php?ugid=" + ugid)
+      .attr("action", "../Groups/group_delete.inc.php?ugid=" + ugid)
       .attr("method", "post")
       .appendTo(body_pos);
 

@@ -36,7 +36,7 @@
 
   require_once "../includes/db.inc.php";
   if (empty($_GET['attemptno']) && empty($_GET['uname'])) {
-    $selectResponsesQuery = $conn->prepare("SELECT users.uid, users.fname, users.lname, users.email, responses.attempt_no, responses.attempt_time
+    $selectResponsesQuery = $conn->prepare("SELECT users.uuid, users.fname, users.lname, users.email, responses.attempt_no, responses.attempt_time
                                             FROM responses JOIN users ON responses.uid=users.uid
                                             WHERE qid IN (
                                               SELECT qid FROM quizzes WHERE uqid=:uqid
@@ -73,10 +73,12 @@
       if (isset($_GET['attemptno'])) {
         $responsesQuery = $conn->prepare("SELECT oid, response, weightage
                                           FROM responses
-                                          WHERE attempt_no=:attno AND uid=:uid AND qid=:qid");
+                                          WHERE attempt_no=:attno AND qid=:qid AND uid IN (
+                                            SELECT uid FROM Users WHERE uuid=:uuid
+                                          )");
         $responsesQuery->execute(array(
           ":attno" => $_GET['attemptno'],
-          ":uid" => ltrim($_GET['uname'], 'u'),
+          ":uuid" => $_GET['uname'],
           ":qid" => $quiz['qid']
         ));
         $responseList = $responsesQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -154,7 +156,7 @@
         <p><?php echo "Attempt: ".$response['attempt_no'] ?></p>
         Attempted on:
         <p><?php echo date(DATE_COOKIE, $response['attempt_time']) ?></p>
-        <a href=<?php echo "../my/quizzes/responses/".$_GET['uqid']."/".$response['attempt_no']."/u".$response['uid'] ?>>
+        <a href=<?php echo "../my/quizzes/responses/".$_GET['uqid']."/".$response['attempt_no']."/".$response['uuid'] ?>>
           View attempt
         </a>
         <hr>

@@ -1,6 +1,6 @@
 <?php
   session_start();
-  require_once "db.inc.php";
+  require_once "../includes/db.inc.php";
 
   if (isset($_POST['delete-group-submit'])) {
     if (isset($_GET['ugid'])) {

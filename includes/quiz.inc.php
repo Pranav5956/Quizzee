@@ -98,6 +98,13 @@
         ":uqid" => $_GET['uqid']
       ));
 
+      $deleteQuestionsQuery = $conn->prepare("DELETE FROM quiz_group WHERE qid IN (
+                                                SELECT qid FROM quizzes WHERE uqid=:uqid
+                                              );");
+      $deleteQuestionsQuery->execute(array(
+        ":uqid" => $_GET['uqid']
+      ));
+
       $deleteQuizQuery = $conn->prepare("DELETE FROM quizzes WHERE uqid=:uqid;");
       $deleteQuizQuery->execute(array(
         ":uqid" => $_GET['uqid']
@@ -110,7 +117,7 @@
                                          VALUES(:uqid, :qname, :type, :code, :create_time, :uid)");
 
       $insertQuizQuery->execute(array(
-        ":uqid" => 'Q'.md5(time()),
+        ":uqid" => 'Q'.hash('crc32', $quiz_name.$quiz_type.time()),
         ":qname" => $quiz_name,
         ":type" => $quiz_type,
         ":code" => $quiz_code,
@@ -151,7 +158,21 @@
     $current_question_id = null;
 
     $current_quiz_id = createQuiz($quiz_name, $quiz_type, $quiz_code);
-    unset($_POST);
+
+    if (isset($_POST['groups'])) {
+      foreach ($_POST['groups'] as $index => $ugid) {
+        $gidQuery = $conn->prepare("SELECT gid FROM groups WHERE ugid=:ugid");
+        $gidQuery->execute(array(":ugid" => $ugid));
+        $gid = $gidQuery->fetch(PDO::FETCH_ASSOC)['gid'];
+
+        $insertQuizQuery = $conn->prepare("INSERT INTO quiz_group(gid, qid)
+                                           VALUES(:gid, :qid)");
+        $insertQuizQuery->execute(array(
+          ":gid" => $gid,
+          ":qid" => $current_quiz_id
+        ));
+      }
+    }
 
     foreach ($question_descriptions as $question_number => $description) {
       $current_question_id = createQuestion($current_quiz_id, $question_number, $description, $question_types[$question_number]);
