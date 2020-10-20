@@ -63,9 +63,10 @@
         return;
       } else {
         // Create the user in the database
-        $create_query = $conn->prepare("INSERT INTO Users(fname, lname, email, pwd, login, profile_pic)
-                                        VALUES(:fname, :lname, :email, NULL, :login, NULL)");
+        $create_query = $conn->prepare("INSERT INTO Users(uuid, fname, lname, email, pwd, login, profile_pic)
+                                        VALUES(:uuid, :fname, :lname, :email, NULL, :login, NULL)");
         $create_query->execute(array(
+          ":uuid" => 'U'.hash('crc32', $fname.$lname.$email.'GOOGLE'),
           ":fname" => $fname,
           ":lname" => $lname,
           ":email" => $email,

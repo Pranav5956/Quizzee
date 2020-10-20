@@ -12,7 +12,7 @@
     ));
     $users = $selectUsersQuery->fetchAll(PDO::FETCH_ASSOC);
     foreach ($users as $index => $user) {
-      echo "<p>Name: ".$user['fname']." ".$user['lname']." (".$user['uuid'].") "."Status: ".(($user['is_admin'] == "Yes")? "Admin":"Member")."</p>";
+      echo "<p>".$user['fname']." ".$user['lname']."    ".(($user['is_admin'] == "Yes")? "<i class='fas fa-user-cog'></i>":"")."</p>";
     }
   } else {
     echo '';

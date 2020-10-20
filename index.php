@@ -69,14 +69,6 @@
 	}
 ?>
 
-<style>
-.dropdown-menu li{
-	margin: 10px;
-}
-img{
-	margin:10px;
-}
-</style>
 
 <?php if (isset($_SESSION['USERID'])): ?>
 	<link rel="stylesheet" href="../modal/modal.css">
@@ -145,10 +137,10 @@ img{
 		} else {
 			$.get("../Groups/group_info.parse.php", {"ugid": $(evt.currentTarget).data()['ugid']}, function(response) {
 	      group_info = JSON.parse(response);
-				$("#group-name").text("Group Name: " + group_info['gname']);
-				$("#group-desc").text("Group Description: " + group_info['gdesc']);
+				$("#group-name").text(group_info['gname']);
+				$("#group-desc").text(group_info['gdesc']);
 				let date = new Date(group_info['create_time'] * 1000);
-				$("#group-create-time").text("Created on: " + date);
+				$("#group-create-time").text(date);
 				$("#group-members").empty();
 				$.get("../Groups/group_members.parse.php", {"ugid": group_info['ugid']}, function(res) {
 					$("#group-members").append($(res));
@@ -192,6 +184,7 @@ img{
 
 <?php if (isset($_SESSION['USERID'])): ?>
 	<link rel="stylesheet" href="../dashboard_style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
 		<div class="tab">
 		<button class="tablinks active" onclick="openCity(event, 'home')">Home</button>
 	  <button class="tablinks" onclick="openCity(event, 'availableQuizzes')">Available Quizzes</button>
@@ -214,8 +207,8 @@ img{
 	<div id="availableQuizzes" class="tabcontent" style="display:none">
 
 		<div class="row">
-			<div class="col-3"></div>
-			<div class="col-9">
+			<!-- <div class="col-3"></div> -->
+			<div class="col-12">
 				<?php if (isset($available_quizzes) && count($available_quizzes)): ?>
 					<?php foreach ($available_quizzes as $quiz_index => $quiz_attributes): ?>
 						<div class="card float-left card-block d-flex quizTitle">
@@ -232,8 +225,8 @@ img{
 
 	<div id="createdQuizzes" class="tabcontent" style="display:none">
 		<div class="row">
-			<div class="col-3"></div>
-			<div class="col-9">
+			<!-- <div class="col-3"></div> -->
+			<div class="col-12">
 				<?php if (isset($created_quizzes) && count($created_quizzes)): ?>
 					<?php foreach ($created_quizzes as $quiz_index => $quiz_attributes): ?>
 						<div class="card float-left created-quiz">
@@ -256,28 +249,38 @@ img{
 			</div>
 		</div>
 	</div>
-
 	<div id="groups" class="tabcontent" style="display:none">
 		<div class="row">
-			<div class="col-3"></div>
-			<div class="col-9">
-				<h3>Group Information</h3>
-				<p id="group-name"></p>
-				<p id="group-desc"></p>
+			<!-- <div class="col-3"></div> -->
+			<div class="col-12 pr-0">
+				<div class="jumbotron pb-3 mr-0 mb-0">
+				<h1 id="group-name" class="d-flex justify-content-center"></h1>
+				<h4 id="group-desc"></h4>
 				<p id="group-create-time"></p>
-				<form method="post" id="add-users-form">
-					<label for="select-user-for-group">Add Users: </label>
-					<select class="chosen" id="select-user-for-group" name="users[]" multiple data-placeholder="Enter Username or UserID"></select>
-					<input type="submit" name="add-users-to-group" value="Add Users" class="btn btn-primary">
-				</form>
-				<h4>Group Members</h4>
-				<div id="group-members"></div>
-				<div id="group-quizzes-container"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="group-buttons offset-3">
 				<button type="button" id="group-delete-button" data-modal="delete-group" data-ugid="" class="modal-trigger btn btn-danger">Delete Group</button>
+				<ul class="nav nav-pills">
+					<li class="btn btn-primary mr-5 mt-3"><a data-toggle="pill" href="#menu1" class="group-links">Quizzes</a></li>
+					<li class="btn btn-primary mt-3"><a data-toggle="pill" href="#menu2" class="group-links">Members</a></li>
+				</ul>
+				</div>
+				<div class="container pl-4">
+					<div>
+					<div class="tab-content">
+						<div id="menu1" class="tab-pane fade">
+							<div id="group-quizzes-container"></div>
+						</div>
+						<div id="menu2" class="tab-pane fade">
+							<form method="post" id="add-users-form" class="mb-4">
+								<h3><label for="select-user-for-group">Add Users: </label></h3>
+								<select class="chosen" id="select-user-for-group" name="users[]" multiple data-placeholder="Enter Username or UserID"></select>
+								<input type="submit" name="add-users-to-group" value="Add Users" class="btn btn-primary">
+							</form>
+							<h4>Group Members</h4>
+							<div id="group-members"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 			</div>
 		</div>
 	</div>
@@ -326,6 +329,5 @@ img{
 		window.location.assign("quizzes/create");
 		return false;
 	}
-
-	$("#select-user-for-group").chosen({ width:"80%" });
+	$("#select-user-for-group").chosen({ width:"50%" });
 </script>

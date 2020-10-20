@@ -1,9 +1,28 @@
 <style>
+body{
+  background:url("https://images.unsplash.com/photo-1597008641621-cefdcf718025?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1874&q=80");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+}
   img {
     width: 150px;
     height: 150px;
   }
-
+  form{
+    width:30%;
+    margin:3rem;
+  }
+  input.form-control{
+    background-color: rgba(0,0,0,0.2);
+    color:white;
+    border: 2px;
+  }
+  input.form-control:focus{
+    background-color:rgba(0,0,0,0.5);
+    color:white;
+  }
   .profile-upload-btn {
     border-radius: 50%;
     padding-left: 2.5px;

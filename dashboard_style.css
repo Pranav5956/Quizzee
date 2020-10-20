@@ -13,6 +13,24 @@
   background-color: #01596f;
   border-color: #01596f;
 }
+
+.dropdown-menu li{
+	margin: 10px;
+}
+
+img{
+	margin:10px;
+}
+
+div#group-panel-collapse.collapse.show{
+  overflow-y:scroll;
+  height:400px;
+}
+
+::-webkit-scrollbar {
+  width: 1em;
+}
+
 .tab {
 float: left;
 width: 30%;
@@ -73,6 +91,8 @@ html {
  background-size: cover;
  background-repeat: no-repeat;
   background-position: center center;
+  background-attachment: fixed;
+  overflow:hidden;
 }
 
 .quizTitle{
@@ -139,4 +159,27 @@ a.btn.btn-outline-danger.modal-trigger:hover
 {
   color:white;
   background-color: #01596f;
+}
+
+.jumbotron{
+  background-color: rgba(0,0,0,0);
+  background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+  color:#c7f2fc;
+  border-radius:0px;
+}
+
+.container{
+  background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+  color: white;
+  border-radius:0px;
+  padding-bottom: 2rem;
+}
+
+.group-links{
+  color:white;
+}
+
+.group-links:hover{
+  color:white;
+  text-decoration:none;
 }
