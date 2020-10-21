@@ -36,6 +36,13 @@
     }
     require_once "quiz.view.php";
   } elseif ($_GET['action'] == "delete") {
+    $deleteGroupQuizQuery = $conn->prepare("DELETE FROM quiz_group WHERE qid IN (
+                                            SELECT qid FROM quizzes WHERE uqid=:uqid
+                                          );");
+    $deleteGroupQuizQuery->execute(array(
+      ":uqid" => $_GET['uqid']
+    ));
+
     $deleteResponsesQuery = $conn->prepare("DELETE FROM responses WHERE qid IN (
                                             SELECT qid FROM quizzes WHERE uqid=:uqid
                                           );");

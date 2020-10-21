@@ -15,6 +15,8 @@ function set_modal(data) {
   let body_pos = modal.find(".modal-body");
   let footer_pos = modal.find(".modal-footer");
 
+  console.log(data['modal']);
+
   if (data["modal"] == "attempt-quiz") {
     var uqid = data['uqid'];
     var quiz_info;
@@ -308,9 +310,13 @@ function fadeOutModal() {
   })
 }
 
-function fadeInModal() {
+function fadeInModal(text, uqid) {
   let modal = $(".modal");
-  set_modal($(this).data());
+  let data = $(this).data();
+  if (jQuery.isEmptyObject(data))
+    data = {'modal': text, 'uqid': uqid};
+
+  set_modal(data);
   modal.css("display", "block");
 
   modal.animate({opacity: 1}, 300, "swing");

@@ -14,6 +14,16 @@
         ":ugid" => $_GET['ugid']
       ));
 
+      $deleteQuizGroupQuery = $conn->prepare("DELETE FROM quiz_group
+                                              WHERE gid IN (
+                                                SELECT gid
+                                                FROM groups
+                                                WHERE ugid = :ugid
+                                              )");
+      $deleteQuizGroupQuery->execute(array(
+        ":ugid" => $_GET['ugid']
+      ));
+
       $deleteGroupsQuery = $conn->prepare("DELETE FROM groups
                                            WHERE ugid = :ugid");
       $deleteGroupsQuery->execute(array(

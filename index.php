@@ -21,6 +21,7 @@
 		$_SESSION['NAME'] = $result['fname'].' '.$result['lname'];
 		$_SESSION['PROFILE-PICTURE'] = $result['profile_pic'];
 		$_SESSION['TYPE'] = $result['login'];
+		$_SESSION['UUID'] = $result['uuid'];
 
 		$delete_modal_name = null;
 	}
@@ -86,20 +87,27 @@
 			<div class="dropdown">
 			  <button class="signedIn dropdown-toggle" type="button" data-toggle="dropdown">Signed In as <?php echo htmlentities($_SESSION['NAME'], ENT_QUOTES, 'utf-8'); ?>
 			  <span class="caret"></span></button>
-			  <ul class="dropdown-menu" style="background:#01596f;">
+			  <div class="dropdown-menu text-center" style="background:#01596f;">
 					<?php if (isset($_SESSION['PROFILE-PICTURE'])): ?>
 						<img src=<?php echo $_SESSION['PROFILE-PICTURE'] ?> alt="Profile Image" class="rounded-circle img-fluid" style="width: 110px; height: 110px;">
 					<?php else: ?>
 						<img src="https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png" alt="No Profile Image" class="rounded-circle" style="width:110px;height:110px;">
 					<?php endif; ?>
+					<div class="dropdown-header">
+						<h6 class="text-light text-center" style="display: inline">User-ID: <?php echo $_SESSION['UUID'] ?>
+						<button type="button" class="btn btn-secondary" name="button" title="Copy User-ID">
+							<span class="fa fa-copy fa-fw text-light"></span>
+						</button>
+						</h6>
+					</div>
 						<form>
 							<?php if ($_SESSION['TYPE'] == 'LOGIN'): ?>
-								<li><a title="Click to view your Profile" class="profileBtn btn" href="profile">My Profile</a></li>
+								<a title="Click to view your Profile" class="profileBtn btn dropdown-item" href="profile">My Profile</a>
 							<?php endif; ?>
-							<li><input type="submit" name="logout-submit" value="Logout"
-										     title="Click to Logout" class="signedIn btn" formaction="../includes/logout.inc.php" formmethod="post"></li>
+							<input type="submit" name="logout-submit" value="Logout"
+										     title="Click to Logout" class="signedIn btn dropdown-item" formaction="../includes/logout.inc.php" formmethod="post">
 						</form>
-				  </ul>
+				  </div>
 				</div>
 			</ul>
 		</div>
@@ -169,12 +177,12 @@
 					let quizzes = JSON.parse(res);
 					$.each(quizzes, function(index, quiz) {
 						$("<div>").addClass("card float-left card-block d-flex quizTitle").append(
-							$("<a>").addClass("card-body align-items-center d-flex justify-content-center modal-trigger gqt").text(quiz['qname'])
-							.attr("data-modal", "attempt-quiz").attr("data-uqid", quiz['uqid'])
+							$("<a>").addClass("card-body align-items-center d-flex justify-content-center modal-trigger").text(quiz['qname'])
+							.attr("data-modal", "attempt-quiz").attr("data-uqid", quiz['uqid']).click(function() {
+								if (quiz['can_attempt']) fadeInModal("attempt-quiz", quiz['uqid']);
+							})
 						).appendTo($("#group-quizzes-container"));
 					});
-					if (group_info['is_admin'] != "Yes")
-						$(".gqt").click(fadeInModal);
 				});
 			});
 		}
@@ -249,7 +257,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="groups" class="tabcontent" style="display:none">
+	<div id="groups" class="tabcontent" style="display:none;">
 		<div class="row">
 			<!-- <div class="col-3"></div> -->
 			<div class="col-12 pr-0">
@@ -263,7 +271,7 @@
 					<li class="btn btn-primary mt-3"><a data-toggle="pill" href="#menu2" class="group-links">Members</a></li>
 				</ul>
 				</div>
-				<div class="container pl-4">
+				<div class="container pl-4" style="height: 100vh;">
 					<div>
 					<div class="tab-content">
 						<div id="menu1" class="tab-pane fade">
