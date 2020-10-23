@@ -1,15 +1,19 @@
 <?php
   if ($_POST) {
+    $selectUidQuery = $conn->prepare("SELECT uid FROM users WHERE uuid=:uuid");
+    $selectUidQuery->execute(array(
+      ":uuid" => $_GET['uname']
+    ));
+    $uid = $selectUidQuery->fetch(PDO::FETCH_ASSOC)['uid'];
+
     foreach ($_POST as $key => $value) {
       if (substr($key, 0, 1) == 'o') {
         $oid = ltrim($key, 'o');
         $updateMarks = $conn->prepare("UPDATE responses
                                        SET weightage=$value
-                                       WHERE attempt_no=:attno AND oid=:oid AND uid IN (
-                                         SELECT uid FROM users WHERE uuid=:uuid
-                                       )");
+                                       WHERE attempt_no=:attno AND oid=:oid AND uid=:uid");
         $updateMarks->execute(array(
-          ":uuid" => $_GET['uname'],
+          ":uid" => $uid,
           ":attno" => $_GET['attemptno'],
           ":oid" => $oid
         ));
@@ -19,7 +23,7 @@
           $insertFeedback = $conn->prepare("INSERT INTO feedback(uid, qnid, attempt_no, feedback_text)
                                             VALUES(:uid, :qnid, :attno, :feedback_text)");
           $insertFeedback->execute(array(
-            ":uid" => ltrim($_GET['uname'], 'u'),
+            ":uid" => $uid,
             ":qnid" => $qnid,
             ":attno" => $_GET['attemptno'],
             ":feedback_text" => $value
