@@ -5,9 +5,11 @@
         $oid = ltrim($key, 'o');
         $updateMarks = $conn->prepare("UPDATE responses
                                        SET weightage=$value
-                                       WHERE uid=:uid AND attempt_no=:attno AND oid=:oid");
+                                       WHERE attempt_no=:attno AND oid=:oid AND uid IN (
+                                         SELECT uid FROM users WHERE uuid=:uuid
+                                       )");
         $updateMarks->execute(array(
-          ":uid" => ltrim($_GET['uname'], 'u'),
+          ":uuid" => $_GET['uname'],
           ":attno" => $_GET['attemptno'],
           ":oid" => $oid
         ));
