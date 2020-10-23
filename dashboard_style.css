@@ -183,3 +183,8 @@ a.btn.btn-outline-danger.modal-trigger:hover
   color:white;
   text-decoration:none;
 }
+
+input {
+  outline: none;
+  box-shadow: none !important;
+}

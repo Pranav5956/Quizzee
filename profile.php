@@ -6,6 +6,12 @@ body{
   background-position: center center;
   background-attachment: fixed;
 }
+
+input {
+  outline: none;
+  box-shadow: none !important;
+}
+
   img {
     width: 150px;
     height: 150px;
@@ -59,40 +65,59 @@ body{
 ?>
 
 <?php if (isset($_GET['action']) && isset($_SESSION['TYPE']) && $_SESSION['TYPE'] == 'LOGIN'): ?>
-  <form action="../includes/profile.inc.php" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-      <?php if (isset($_SESSION['PROFILE-PICTURE'])): ?>
-        <img id="profile-pic" src=<?php echo $user['profile_pic'] ?> alt="Profile Picture" class="rounded-circle">
-      <?php else: ?>
-        <img id="profile-pic" src="https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png" alt="Profile Picture" class="rounded-circle">
-      <?php endif; ?>
-      <label class="fa fa-camera profile-upload-btn">
-        <input id="profile-pic-upload" type="file" name="profile-pic" value="Upload Profile Picture" style="display: none">
-      </label>
-      <small id="profile-pic-msg" style="color:red; display:none;">Upload images with size less than 1MB</small>
-    </div>
-    <div class="form-group">
-      <input type="text" name="fname" value=<?php echo $user['fname'] ?> class="form-control" placeholder="First Name" required>
-    </div>
-    <div class="form-group">
-      <input type="text" name="lname" value=<?php echo $user['lname'] ?> class="form-control" placeholder="Last Name" required>
-    </div>
-    <div class="form-group">
-      <input type="text" name="email" value=<?php echo $user['email'] ?> class="form-control" placeholder="Email ID" required>
-    </div>
-    <input type="submit" class="btn btn-primary" name="update-profile" value="Update Profile">
-  </form>
+  <div class="offset-1">
+    <form action="../includes/profile.inc.php" method="post" enctype="multipart/form-data">
+      <div class="form-row form-group align-items-center">
+        <div class="col-6">
+          <?php if (isset($_SESSION['PROFILE-PICTURE'])): ?>
+            <img id="profile-pic" src=<?php echo $user['profile_pic'] ?> alt="Profile Picture" class="rounded-circle">
+          <?php else: ?>
+            <img id="profile-pic" src="https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png" alt="Profile Picture" class="rounded-circle">
+          <?php endif; ?>
+          <label class="fa fa-camera profile-upload-btn">
+            <input id="profile-pic-upload" type="file" name="profile-pic" value="Upload Profile Picture" style="display: none">
+          </label>
+          <small id="profile-pic-msg" style="color:red; display:none;">Upload images with size less than 1MB</small>
+        </div>
+        <div class="col-4">
+          <p class="text-light text-center mb-1">Copy User-ID</p>
+          <div class="input-group">
+            <input id="uuidBox" type="text" value=<?php echo $_SESSION['UUID'] ?> style="border: 1px solid white;" class="form-control form-control-plaintext bg-light text-dark" readonly length="9">
+            <div class="input-group-append" title="Copy User-ID">
+              <div class="input-group-text">
+                <span id="uuidCopy" class="fa fa-copy fa-fw" role="button"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="text" name="fname" value=<?php echo $user['fname'] ?> class="form-control" placeholder="First Name" required>
+      </div>
+      <div class="form-group">
+        <input type="text" name="lname" value=<?php echo $user['lname'] ?> class="form-control" placeholder="Last Name" required>
+      </div>
+      <div class="form-group">
+        <input type="text" name="email" value=<?php echo $user['email'] ?> class="form-control" placeholder="Email ID" required>
+      </div>
+      <input type="submit" class="btn btn-primary" name="update-profile" value="Update Profile">
+    </form>
 
-  <form action="../includes/profile.inc.php" method="post">
-    <div class="form-group">
-      <input type="password" id="npwd" name="npwd" class="form-control" placeholder="New Password" required>
-    </div>
-    <div class="form-group">
-      <input type="password" id="cpwd" name="cpwd" class="form-control" placeholder="Confirm Password" required>
-    </div>
-    <small id="password-msg" style="color:red; display:none;">Confirmation Password is Wrong</small>
-    <input type="submit" class="btn btn-primary" name="update-password" value="Update Password">
-  </form>
+    <form action="../includes/profile.inc.php" method="post">
+      <div class="form-group">
+        <input type="password" id="npwd" name="npwd" class="form-control" placeholder="New Password" required>
+      </div>
+      <div class="form-group">
+        <input type="password" id="cpwd" name="cpwd" class="form-control" placeholder="Confirm Password" required>
+      </div>
+      <small id="password-msg" style="color:red; display:none;">Confirmation Password is Wrong</small>
+      <input type="submit" class="btn btn-primary" name="update-password" value="Update Password">
+    </form>
+
+      <a href="../my/dashboard" class="btn btn-secondary offset-1">
+        <span class="fa fa-arrow-left"></span> Go back to Dashboard
+      </a>
+  </div>
 <?php else: ?>
   <?php
     if (isset($_SESSION['USERID'])) {
@@ -106,6 +131,11 @@ body{
 <?php endif; ?>
 
 <script>
+  $("#uuidCopy").click(function() {
+    $("#uuidBox").select();
+    document.execCommand("copy");
+  });
+
   $("#profile-pic-upload").change(function() {
       let file = document.getElementById("profile-pic-upload").files;
       if (file[0].size <= 1000000) {

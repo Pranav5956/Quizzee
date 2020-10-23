@@ -36,6 +36,7 @@
           $_SESSION['PROFILE-PICTURE'] = $result['profile_pic'];
         }
         $_SESSION['SUCCESS'] = "Successfully Logged in!";
+        $_SESSION['UUID'] = $result['uuid'];
         // header("Location: ../index.php");
         header("Location: ../my/dashboard");
         return;

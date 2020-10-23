@@ -118,6 +118,13 @@ function set_modal(data) {
       .attr("value", "Attempt")
       .appendTo("#attempt-form");
 
+      $('<a>')
+      .attr("role", "button")
+      .addClass('modal-extra btn btn-secondary')
+      .attr("href", "../my/quizzes/authenticate/" + data['uqid'])
+      .text("More Information")
+      .appendTo("#attempt-form");
+
       $('<p>')
       .attr("id", "modal-footer")
       .addClass("modal-extra")

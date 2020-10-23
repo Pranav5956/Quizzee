@@ -45,20 +45,23 @@
       $lname = $data['family_name'];
       $email = $data['email'];
       $profilepic = $data['picture'];
+      $uuid = 'U'.hash('crc32', $fname.$lname.$email.'GOOGLE');
 
       $exists_query = $conn->prepare("SELECT * FROM Users WHERE email=:email AND login='GOOGLE'");
       $exists_query->execute(array(
         ":email" => $email
       ));
 
-      if ($exists_query->rowCount() > 0) {
-        $_SESSION['USERID'] = $exists_query->fetch(PDO::FETCH_ASSOC)['uid'];
+      $user = $exists_query->fetch(PDO::FETCH_ASSOC);
+      if ($user) {
+        $_SESSION['USERID'] = $user['uid'];
         $_SESSION['NAME'] = $fname." ".$lname;
         $_SESSION['NAME_URL'] = str_replace(' ', '', $_SESSION['NAME']);
 
         $_SESSION['PROFILE-PICTURE'] = $profilepic;
         $_SESSION['TYPE'] = 'GOOGLE';
         $_SESSION['SUCCESS'] = "Logged in!";
+        $_SESSION['UUID'] = $user['uuid'];
         header("Location: ../my/dashboard");
         return;
       } else {
@@ -66,7 +69,7 @@
         $create_query = $conn->prepare("INSERT INTO Users(uuid, fname, lname, email, pwd, login, profile_pic)
                                         VALUES(:uuid, :fname, :lname, :email, NULL, :login, NULL)");
         $create_query->execute(array(
-          ":uuid" => 'U'.hash('crc32', $fname.$lname.$email.'GOOGLE'),
+          ":uuid" => $uuid,
           ":fname" => $fname,
           ":lname" => $lname,
           ":email" => $email,
@@ -81,6 +84,7 @@
       $_SESSION['PROFILE-PICTURE'] = $profilepic;
       $_SESSION['TYPE'] = 'GOOGLE';
       $_SESSION['SUCCESS'] = "Successfully Logged in!";
+      $_SESSION['UUID'] = $uuid;
       header("Location: ../my/dashboard");
       return;
     } else {

@@ -150,7 +150,7 @@
 
   <?php foreach ($responses as $index => $response): ?>
     <div class="card float-left">
-        <p class="card-header"><?php echo $response['fname']." ".$response['lname'] ?></p>
+        <p class="card-header"><?php echo $response['fname']." ".$response['lname']." (".$response['uuid'].")" ?></p>
           <div class="card-body">
         <p><?php echo $response['email'] ?></p>
         <p><?php echo "Attempt: ".$response['attempt_no'] ?></p>

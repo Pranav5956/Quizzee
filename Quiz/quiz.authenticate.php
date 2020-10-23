@@ -43,6 +43,12 @@
       <input type="submit" name="attempt" value="Attempt" class="btn btn-success">
       <input type="button" class="leave-button btn btn-danger" name="leave" value="Leave">
     </form>
+  <?php else: ?>
+    <p>This quiz is restricted to a Group. Would you like to attempt it?</p>
+    <form class="form-authenticate" action=<?php echo $attempt_url ?> method="post">
+      <input type="submit" name="attempt" value="Attempt" class="btn btn-success">
+      <input type="button" class="leave-button btn btn-danger" name="leave" value="Leave">
+    </form>
   <?php endif; ?>
   <p class="error" style="color: red; display: none;">Incorrect Code</p>
 </div>

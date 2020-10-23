@@ -37,7 +37,7 @@ crossorigin="anonymous"></script>
       </div>
       <div class="quiz-code-container">
         <label for="quiz-code-display">Quiz Code: </label>
-        <input form="form-editable" id="quiz-code-display" type="text" name="quiz-code" value=<?php echo substr(md5($_SESSION['USERID'].time()), 0, 8); ?> min="8" max="8" readonly>
+        <input form="form-editable" id="quiz-code-display" type="text" name="quiz-code" value=<?php echo 'Q'.substr(md5($_SESSION['USERID'].time()), 0, 8); ?> min="8" max="8" readonly>
       </div>
     </div>
     <form id="form-editable" action=<?php echo $submit_url ?> method="post" class="quiz-form" onsubmit="return validateQuiz();">

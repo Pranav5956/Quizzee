@@ -11,9 +11,7 @@
       ":ugid" => $_GET['ugid']
     ));
     $users = $selectUsersQuery->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($users as $index => $user) {
-      echo "<p>".$user['fname']." ".$user['lname']."    ".(($user['is_admin'] == "Yes")? "<i class='fas fa-user-cog'></i>":"")."</p>";
-    }
+    echo json_encode($users);
   } else {
     echo '';
     return;

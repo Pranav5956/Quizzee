@@ -40,10 +40,11 @@
           return;
         } else {
           // Create a new Users entry in the database
+          $uuid = 'U'.hash('crc32', $_POST['first-name'].$_POST['last-name'].$_POST['email'].$_POST['password'].'LOGIN');
           $signin_query = $conn->prepare("INSERT INTO Users(uuid, fname, lname, email, pwd, login, profile_pic)
                                           VALUES(:uuid, :fname, :lname, :email, :pwd, :login, NULL)");
           $signin_query->execute(array(
-            ':uuid' => 'U'.hash('crc32', $_POST['first-name'].$_POST['last-name'].$_POST['email'].$_POST['password'].'LOGIN'),
+            ':uuid' => $uuid,
             ':fname' => $_POST['first-name'],
             ':lname' => $_POST['last-name'],
             ':email' => $_POST['email'],
@@ -56,6 +57,7 @@
           $_SESSION['NAME'] = $_POST['first-name']." ".$_POST['last-name'];
           $_SESSION['TYPE'] = 'LOGIN';
           $_SESSION['SUCCESS'] = "Signed in successfully!";
+          $_SESSION['UUID'] = $uuid;
           header("Location: ../my/dashboard");
           return;
         }
