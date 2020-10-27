@@ -177,6 +177,8 @@ a.btn.btn-outline-danger.modal-trigger:hover
 
 .group-links{
   color:white;
+  font-weight:500;
+  font-size:20px;
 }
 
 .group-links:hover{
@@ -187,4 +189,8 @@ a.btn.btn-outline-danger.modal-trigger:hover
 input {
   outline: none;
   box-shadow: none !important;
+}
+
+.btn-group.offset-1{
+  padding-left:0;
 }

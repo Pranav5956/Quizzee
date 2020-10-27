@@ -166,7 +166,7 @@
 							$("#group-members").append(
 								$('<p>').text(member['fname'] + " " + member['lname'] + " (" + member['uuid'] + ") ")
 								.append(
-									$('<span>').addClass("fa fa-user-cog")
+									$('<span>').addClass("fa fa-user-cog ml-2")
 								)
 							)
 						} else {
@@ -174,12 +174,12 @@
 								$("#group-members").append(
 									$('<p>').text(member['fname'] + " " + member['lname'] + " (" + member['uuid'] + ") ").css("display", "inline")
 								).append(
-									$('<a>').addClass("btn btn-primary").html("<i class='fa fa-user-cog fa-fw'></i>").attr("title", "Make Admin")
+									$('<a>').addClass("ml-2 mr-3").html("<i class='fa fa-user-cog fa-fw'></i>").attr("title", "Make Admin")
 									.attr("href", "../Groups/make_admin.php?ugid=" + group_info['ugid'] + "&uuid=" + member['uuid'])
 								).append(
-									$('<a>').addClass("btn btn-danger").html("<i class='fa fa-user-slash fa-fw'></i>").attr("title", "Remove User")
+									$('<a>').html("<i class='fa fa-user-slash fa-fw'></i>").attr("title", "Remove User")
 									.attr("href", "../Groups/remove_users_from_group.php?ugid=" + group_info['ugid'] + "&uuid=" + member['uuid'])
-								).append('<br>')
+								).append('<br><br>')
 							} else {
 								$("#group-members").append(
 									$('<p>').text(member['fname'] + " " + member['lname'] + " (" + member['uuid'] + ") ")
@@ -316,10 +316,10 @@
 				<h1 id="group-name" class="d-flex justify-content-center"></h1>
 				<h4 id="group-desc"></h4>
 				<p id="group-create-time"></p>
-				<ul class="nav nav-pills">
-					<li class="btn btn-primary mr-5 mt-3"><a data-toggle="pill" href="#menu1" class="group-links">Quizzes</a></li>
-					<li class="btn btn-primary mr-5 mt-3"><a data-toggle="pill" href="#menu2" class="group-links">Members</a></li>
-					<li class="btn btn-primary mt-3"><a data-toggle="pill" href="#menu3" class="group-links">Group</a></li>
+				<ul class="nav nav-tabs">
+					<li class="nav-item mr-5 mt-3"><a data-toggle="pill" href="#menu1" class="nav-link group-links">Quizzes</a></li>
+					<li class="nav-item mr-5 mt-3"><a data-toggle="pill" href="#menu2" class="nav-link group-links">Members</a></li>
+					<li class="nav-item mt-3"><a data-toggle="pill" href="#menu3" class="nav-link group-links">Group</a></li>
 				</ul>
 				</div>
 				<div class="container pl-4" style="height: 100vh;">
@@ -329,18 +329,18 @@
 							<div id="group-quizzes-container"></div>
 						</div>
 						<div id="menu2" class="tab-pane fade">
-							<form method="post" id="add-users-form" class="mb-4">
+							<form method="post" id="add-users-form" class="mb-4 ml-3">
 								<h4>Add Members</h4>
 								<select class="chosen" id="select-user-for-group" name="users[]" multiple data-placeholder="Enter Username or UserID"></select>
 								<button type="submit" name="add-users-to-group" value="Add Users" class="btn btn-primary">
 									<span class="fa fa-plus"></span>
 								</button>
 							</form>
-							<h4>Group Members</h4>
-							<div id="group-members"></div>
+							<h4 class="ml-3 mb-4">Group Members</h4>
+							<div id="group-members" class="ml-3"></div>
 						</div>
 						<div id="menu3" class="tab-pane fade">
-							<h4>Group Information</h4>
+							<h4 class="ml-3">Group Information</h4>
 							<p id="edit-group-label" class="text-light text-center col-6">
 								(Only Group Administrator can change the Group Information. Contact the Group Administrator for any changes.)
 							</p>
@@ -352,11 +352,11 @@
 									<div class="form-group col-6">
 										<input id="edit-gdesc" type="text" name="gdesc" placeholder="Enter new Group Description" class="form-control" required>
 									</div>
-									<div class="btn-group offset-1">
+									<div class="btn-group offset-1 ml-3">
 										<button type="submit" id="edit-group-btn" name="group-edit" value="group-update" class="btn btn-primary">
 											<i class="fa fa-cog"></i> Update Group Details
 										</button>
-										<button type="button" id="group-delete-button" data-modal="delete-group" data-ugid="" class="modal-trigger btn btn-danger" style="display: block;">
+										<button type="button" id="group-delete-button" data-modal="delete-group" data-ugid="" class="modal-trigger btn btn-danger ml-4" style="display: block;">
 											<i class="fa fa-trash"></i> Delete Group
 										</button>
 									</div>
@@ -414,5 +414,5 @@
 		window.location.assign("quizzes/create");
 		return false;
 	}
-	$("#select-user-for-group").chosen({ width:"50%" });
+	$("#select-user-for-group").chosen({ width:"50%" }).addClass("ml-3");
 </script>

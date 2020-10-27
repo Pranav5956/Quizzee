@@ -25,28 +25,28 @@ body {
   background-repeat: no-repeat;
   opacity: 0;
   z-index: 0;
-  animation: imageAnimation 50s linear infinite;
+  animation: imageAnimation 25s linear infinite;
 }
 
 .slideshow li:nth-child(1) {
-  background-image: url(https://images.unsplash.com/photo-1497493292307-31c376b6e479?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80)
+  background-image: url(https://images.unsplash.com/photo-1497493292307-31c376b6e479?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80);
 }
 .slideshow li:nth-child(2) {
   background-image: url(https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);
-  animation-delay: 10s;
+  animation-delay: 5s;
 }
 .slideshow li:nth-child(3) {
   background-image: url(https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80);
-  animation-delay: 20s;
+  animation-delay: 10s;
 }
 .slideshow li:nth-child(4) {
   background-image: url(https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80);
-  animation-delay: 30s;
+  animation-delay: 15s;
 }
 
 .slideshow li:nth-child(5) {
   background-image: url(https://images.unsplash.com/photo-1581120083654-150513117cbf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80);
-  animation-delay: 40s;
+  animation-delay: 20s;
 }
 
 .left-slideshow h1{
@@ -55,14 +55,14 @@ body {
   opacity: 0;
   color:white;
   z-index: 0;
-  animation: imageAnimation 50s linear infinite;
+  animation: imageAnimation 25s linear infinite;
 }
 
 .left-slideshow h1:nth-child(2) {
-  animation-delay: 10s;
+  animation-delay: 5s;
 }
 .left-slideshow h1:nth-child(3) {
-  animation-delay: 20s;
+  animation-delay: 10s;
 }
 
 .right-slideshow h1{
@@ -72,14 +72,14 @@ body {
   opacity: 0;
   color:white;
   z-index: 0;
-  animation: imageAnimation 50s linear infinite;
+  animation: imageAnimation 25s linear infinite;
 }
 
 .right-slideshow h1:nth-child(1) {
-  animation-delay: 30s;
+  animation-delay: 15s;
 }
 .right-slideshow h1:nth-child(2) {
-  animation-delay: 40s;
+  animation-delay: 20s;
 }
 
 

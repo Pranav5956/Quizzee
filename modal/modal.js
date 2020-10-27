@@ -120,9 +120,9 @@ function set_modal(data) {
 
       $('<a>')
       .attr("role", "button")
-      .addClass('modal-extra btn btn-secondary')
+      .addClass('modal-extra btn btn-secondary ml-3')
       .attr("href", "../my/quizzes/authenticate/" + data['uqid'])
-      .text("More Information")
+      .text("Summary of Previous Attempts")
       .appendTo("#attempt-form");
 
       $('<p>')

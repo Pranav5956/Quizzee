@@ -9,7 +9,12 @@
   font-size: 30px;
   margin-top: 20%;
 }
-
+.no-attempt{
+  font-size: 30px;
+  color:white;
+  font-weight: bold;
+  padding-left:2rem;
+}
 .card{
   margin: 2rem;
   border-radius: 8px;
@@ -29,7 +34,7 @@
 }
 
 .auth{
-  background-image: url("https://images.unsplash.com/photo-1564207550505-5135c0fe4e76?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80");
+  background-image: url("https://images.unsplash.com/photo-1597600159211-d6c104f408d1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1874&q=80");
   background-repeat: no-repeat;
   background-size: cover;
   background:
