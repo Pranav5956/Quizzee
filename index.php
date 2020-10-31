@@ -140,6 +140,92 @@
 		document.execCommand("copy");
 	});
 
+	function display_information(id) {
+		if (id != undefined && id != "") {
+			$("#searchedGroupMembers").text('');
+			$("#searchedUserProfilePic").attr("src", "https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png");
+			
+			if (id[0] == 'U') {
+				$("#searchedQuiz *").text('');
+				$("#searchedQuizAttempt-trigger").data("uqid", "");
+				$("#searchedUser").show();
+				$("#searchedQuiz").hide();
+				$("#searchedGroup").hide();
+				$.get("../includes/userinfo.inc.php", {"uuid": id}, function(response) {
+					$("#searchResults").show();
+					let user = JSON.parse(response);
+					$("#searchTitle").text("USER INFORMATION");
+					$("#searchDesc").text(user['fname'] + " " + user['lname'] + " (" + user['uuid'] + ")");
+					$("#searchedUserFirstName").text("First Name: " + user['fname']);
+					$("#searchedUserLastName").text("Last Name: " + user['lname']);
+					$("#searchedUserEmail").text("Email ID: " + user['email']);
+					$("#searchedUserLogin").text("Login Type: " + user['login']);
+					if (user['profile_pic'] != null) {
+						$("#searchedUserProfilePic").attr("src", user['profile_pic']);
+					}
+				});
+			} else if (id[0] == "Q") {
+				$("#searchedUser *").text('');
+				$("#searchedUserProfilePic").attr("src", "https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png");
+				$("#searchedQuiz").show();
+				$("#searchedUser").hide();
+				$("#searchedGroup").hide();
+				$.get("../includes/quizinfo.inc.php", {"uqid": id}, function(response) {
+					$("#searchResults").show();
+					let quiz = JSON.parse(response);
+					$("#searchTitle").text("QUIZ INFORMATION");
+					$("#searchDesc").text(quiz['qname'] + " (" + quiz['uqid'] + ")");
+					$("#searchedQuizName").text("Quiz Name: " + quiz['qname']);
+					$("#searchedQuizCreation").text("Created on: " + Date(quiz['create_time'] * 1000));
+					$("#searchedQuizType").text("Quiz Type: " + ((quiz['type'] == "O")? "Open": "Code-Protected"));
+					$("#searchedQuizCreator").text("Created by: " + quiz['fname'] + " " + quiz['lname'] + " (" + quiz['uuid'] + ")");
+					$("#searchedQuizAttempt-trigger").data("uqid", quiz['uqid']).text("Attempt");
+				});
+			} else if (id[0] == "G") {
+				$("#searchedUser").hide();
+				$("#searchedQuiz").hide();
+				$("#searchedGroup").show();
+
+				$.get("../includes/groupinfo.inc.php", {"ugid": id}, function(response) {
+					$("#searchResults").show();
+					let group = JSON.parse(response);
+					$("#searchTitle").text("GROUP INFORMATION");
+					$("#searchDesc").text(group['gname'] + " (" + group['ugid'] + ")");
+					$("#searchedGroupName").text("Quiz Name: " + group['gname']);
+					$("#searchedGroupCreation").text("Created on: " + Date(group['create_time'] * 1000));
+					$("#searchedGroupDesc").text("Quiz Description: " + group['gdesc']);
+					$("#searchedGroupCreator").text("Created by: " + group['creator']);
+
+					group['members'].forEach((member, i) => {
+						if (member["is_admin"] == "Yes") {
+							$("#searchedGroupMembers").append(
+								$("<li>")
+								.text(member["member"] + " ")
+								.append(
+									$("<span>").addClass("fa fa-user-cog fa-fw")
+								)
+							);
+						} else {
+							$("#searchedGroupMembers").append(
+								$("<li>")
+								.text(member["member"])
+							);
+						}
+					});
+
+				});
+			}
+		} else {
+			$("#searchedUser *").text('');
+			$("#searchedUserProfilePic").attr("src", "https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png");
+			$("#searchedQuiz *").text('');
+			$("#searchedQuizAttempt-trigger").data("uqid", "");
+			$("#searchedGroup *").text('');
+			$("#searchedGroupMembers").text('');
+			$("#searchResults").hide();
+		}
+	};
+
 	function openCity(evt, tabName) {
 		$(".tabcontent").css("display", "none");
 		$(".tablinks").removeClass("active");
@@ -147,6 +233,12 @@
 		$(evt.currentTarget).addClass("active");
 
 		if (tabName != "groups") {
+			if (tabName == "home") {
+				$("#default").prop("selected", "true");
+				$("#searchSelect").trigger("chosen:updated");
+				display_information();
+			}
+
 			$("#group-panel-collapse").collapse("hide");
 			$("#group-name").text("");
 			$("#group-desc").text("");
@@ -259,9 +351,78 @@
 		</div>
 	</div>
 
-	<div id="home" class="tabcontent" style="display:none">
-
+	<div id="home" class="tabcontent show">
+		<select id="searchSelect" class="chosen" data-placeholder="Search for users, quizzes or groups">
+			<option id="default"></option>
+			<optgroup id="usersOptGroup" label="Users">
+			</optgroup>
+			<optgroup id="quizzesOptGroup" label="Quizzes">
+			</optgroup>
+			<optgroup id="groupsOptGroup" label="Groups">
+			</optgroup>
+		</select>
+		<div id="searchResults" style="display: none;">
+			<h2 id="searchTitle"></h2>
+			<h5 id="searchDesc"></h5>
+			<div id="searchedUser">
+				<img id="searchedUserProfilePic" style="width: 150px;" src="https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png" class="rounded-circle">
+				<p id="searchedUserFirstName"></p>
+				<p id="searchedUserLastName"></p>
+				<p id="searchedUserEmail"></p>
+				<p id="searchedUserLogin"></p>
+			</div>
+			<div id="searchedQuiz">
+				<p id="searchedQuizName"></p>
+				<p id="searchedQuizCreation"></p>
+				<p id="searchedQuizType"></p>
+				<p id="searchedQuizCreator"></p>
+				<button id="searchedQuizAttempt-trigger" class="btn btn-primary modal-trigger"
+				data-modal="attempt-quiz" data-uqid="">Attempt Quiz</button>
+			</div>
+			<div id="searchedGroup">
+				<p id="searchedGroupName"></p>
+				<p id="searchedGroupDesc"></p>
+				<p id="searchedGroupCreator"></p>
+				<p id="searchedGroupCreation"></p>
+				<h4>Members:</h4>
+				<ul id="searchedGroupMembers" class="list-unstyled">
+				</ul>
+			</div>
+		</div>
 	</div>
+
+	<script>
+		$.post("../includes/searchlist.inc.php", {"token": "123456789"}, function(response) {
+			let res = JSON.parse(response);
+			res.forEach((item, index) => {
+				if (item["id"][0] == "U") {
+					$("#usersOptGroup").append(
+						$("<option>")
+						.val(item['id'])
+						.text(item['name'] + " (" + item['id'] + ")")
+					);
+				} else if (item["id"][0] == "Q") {
+					$("#quizzesOptGroup").append(
+						$("<option>")
+						.val(item['id'])
+						.text(item['name'] + " (" + item['id'] + ") - " + item["type"])
+					);
+				} else if (item["id"][0] == "G") {
+					$("#groupsOptGroup").append(
+						$("<option>")
+						.val(item['id'])
+						.text(item['name'] + " (" + item['id'] + ")")
+					);
+				}
+			});
+			$("#searchSelect").trigger("chosen:updated");
+		});
+
+		$("#searchSelect").change(function() {
+			let selected = $(this).find(":selected");
+			display_information(selected.val());
+		});
+	</script>
 
 	<div id="availableQuizzes" class="tabcontent" style="display:none">
 
@@ -414,5 +575,5 @@
 		window.location.assign("quizzes/create");
 		return false;
 	}
-	$("#select-user-for-group").chosen({ width:"50%" }).addClass("ml-3");
+	$(".chosen").chosen({ width:"50%" }).addClass("ml-3");
 </script>
