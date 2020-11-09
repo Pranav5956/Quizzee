@@ -1,5 +1,6 @@
 body {
   background-color: darkgray;
+  overflow-x: hidden;
 }
 
 .slideshow {

@@ -1,4 +1,8 @@
 
+body{
+  overflow-x: hidden;
+}
+
 .quiz-edit{
   background-color:rgb(0,26,67,0.5);
   padding: 2rem;
@@ -209,13 +213,13 @@ input[type="checkbox"].preview-question-option-display:checked + label{
   font-weight: 600;
 }
 
-label.attended-correct{
+label.attended-correct,label.unattended-correct{
   background:#0589e6;
   font-weight: 600;
   color: black;
 }
 
-label.attended-incorrect, label.unattended-correct{
+label.attended-incorrect{
   background:#DC3545;
   font-weight: 600;
   color: black;

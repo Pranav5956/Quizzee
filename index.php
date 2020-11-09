@@ -144,7 +144,7 @@
 		if (id != undefined && id != "") {
 			$("#searchedGroupMembers").text('');
 			$("#searchedUserProfilePic").attr("src", "https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png");
-			
+
 			if (id[0] == 'U') {
 				$("#searchedQuiz *").text('');
 				$("#searchedQuizAttempt-trigger").data("uqid", "");
@@ -335,13 +335,13 @@
 	<link rel="stylesheet" href="../dashboard_style.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
 		<div class="tab">
-		<button class="tablinks active" onclick="openCity(event, 'home')">Home</button>
+		<button class="tablinks active" onclick="openCity(event, 'home')">Search</button>
 	  <button class="tablinks" onclick="openCity(event, 'availableQuizzes')">
-			Available Quizzes <span class="badge badge-info"><?php echo count($available_quizzes) ?></button>
+			<span class="tab-heading">Home</span> <span class="badge badge-info"><?php echo count($available_quizzes) ?></button>
 	  <button class="tablinks" onclick="openCity(event, 'createdQuizzes')">
-			Created Quizzes <span class="badge badge-info"><?php echo count($created_quizzes) ?></button>
+			<span class="tab-heading">My Quizzes</span> <span class="badge badge-info"><?php echo count($created_quizzes) ?></button>
 	  <button class="tablinks" data-toggle="collapse" data-target="#group-panel-collapse">
-			Groups <span class="badge badge-info"><?php echo count($groups) ?></span></button>
+			<span class="tab-heading">My Groups</span> <span class="badge badge-info"><?php echo count($groups) ?></span></button>
 		<div class="collapse" id="group-panel-collapse" style="max-height: 380px;">
 			<?php foreach ($groups as $index => $attr): ?>
 				<button type="button" data-ugid=<?php echo $attr['ugid'] ?> onclick="openCity(event, 'groups')" class="tablinks"><?php echo htmlentities($attr['gname'], ENT_QUOTES, 'utf-8'); ?></button>
@@ -352,6 +352,7 @@
 	</div>
 
 	<div id="home" class="tabcontent show">
+		<div class="jumbotron mb-0"><h1>Search</h1>
 		<select id="searchSelect" class="chosen" data-placeholder="Search for users, quizzes or groups">
 			<option id="default"></option>
 			<optgroup id="usersOptGroup" label="Users">
@@ -361,6 +362,7 @@
 			<optgroup id="groupsOptGroup" label="Groups">
 			</optgroup>
 		</select>
+	</div>
 		<div id="searchResults" style="display: none;">
 			<h2 id="searchTitle"></h2>
 			<h5 id="searchDesc"></h5>
@@ -576,4 +578,5 @@
 		return false;
 	}
 	$(".chosen").chosen({ width:"50%" }).addClass("ml-3");
+
 </script>
