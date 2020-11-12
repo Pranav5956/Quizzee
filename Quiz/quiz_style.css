@@ -178,13 +178,18 @@ input[type=submit]{
 .preview-question-option-display{
   margin-right: 0.5rem;
   font-size: 15px;
+  vertical-align: middle;
 }
 .preview-question-option-label{
   padding: 5px 10px;
+  padding-top: 10px;
   font-size: 18px;
   position: relative;
   text-align: left;
   border-radius: 3px;
+  max-width: 370px;
+  vertical-align: middle;
+  word-wrap: break-word;
   -webkit-transition: background 600ms ease, color 600ms ease;
   transition: background 600ms ease, color 600ms ease;
 }

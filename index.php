@@ -75,9 +75,9 @@
 	<link rel="stylesheet" href="../modal/modal.css">
 	<script type="text/javascript" src="../modal/modal.js"></script>
 
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>
-		<img src="../Resources/Images/logo.png" alt="Quizzee Logo" style="width:28%; margin-top:-20px; margin-bottom:-20px;">
+		<span class="navbar-logo">QUIZZEE</span>
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -119,7 +119,7 @@
 	<?php else: ?>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="z-index:1;">
 			<a class="navbar-brand" href=<?php echo $_SERVER['REQUEST_URI'] ?>>
-				<img src="Resources/Images/logo.png" alt="Quizzee Logo" style="width:28%; margin-top:-20px; margin-bottom:-20px;">
+				<span class="navbar-logo">QUIZZEE</span>
 			</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>

@@ -1,6 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+
 body {
   background-color: darkgray;
   overflow-x: hidden;
+}
+
+.navbar-logo {
+  font-family: 'Kaushan Script', cursive;
+  font-size: 1.6rem;
+  font-weight: 500;
 }
 
 .slideshow {

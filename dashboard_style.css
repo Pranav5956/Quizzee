@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
+
 .signedIn, .profileBtn{
   display: inline-block;
   font-weight: 400;
@@ -14,6 +17,15 @@
   border-color: #01596f;
 }
 
+* {
+  font-family: 'Acme', sans-serif;
+}
+
+.navbar-logo {
+  font-family: 'Kaushan Script', cursive;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
 
 #searchResults{
   background-color: rgba(0,0,0,0);
